@@ -6,7 +6,6 @@ import React from 'react';
  * Defines the properties of a window.
  */
 
-
 export type WindowDefinition = {
   id: string;
   title: string;
@@ -14,6 +13,11 @@ export type WindowDefinition = {
   component: React.ReactNode;
   initialSize?: { width: number; height: number };
   initialPosition?: { x: number; y: number };
+  layer?: 'base' | 'normal' | 'alwaysOnTop' | 'modal';
+  isMaximized?: boolean;
+  canMinimize?: boolean;
+  canMaximize?: boolean;
+  canClose?: boolean;
 }
 
 export type FolderDefinition = {
@@ -29,28 +33,24 @@ export type ToolbarItem = WindowDefinition | FolderDefinition;
  * WindowInstance type.
  * Defines the properties of a window instance.
  */
-export type WindowInstance = {
-  id: string;
-  icon?: React.ReactNode;
-  title: string;
-  size?: { width: number; height: number };
-  position?: { x: number; y: number };
+export type WindowInstance = Omit<WindowDefinition, 'initialSize' | 'initialPosition'> & {
+  size: { width: number; height: number };
+  position: { x: number; y: number };
   isMinimized?: boolean;
   isMaximized?: boolean;
   isSnapped?: boolean;
   zIndex: number;
-  component: React.ReactNode;
 }
 
 /**
- * WindowStore type.
+ * WindowSystemProvider type.
  * Defines the properties of the window store.
  */
-export type WindowStore = {
+export type WindowSystemProvider = {
   windows: WindowInstance[];
   snapPreview: { side: 'left' | 'right' } | null;
   setSnapPreview: (preview: { side: 'left' | 'right' } | null) => void;
-  openWindow: (window: WindowInstance) => void;
+  openWindow: (window: WindowDefinition) => void;
   closeWindow: (id: string) => void;
   focusWindow: (id: string) => void;
   updateWindow: (id: string, data: Partial<WindowInstance>) => void;

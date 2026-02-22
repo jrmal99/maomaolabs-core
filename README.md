@@ -1,203 +1,175 @@
-# 🐱 MaoMao Core
+# @maomaolabs/core
 
-**A High-Performance Window Management System for React.**
+> A standalone lightweight React library that brings a complete, performant, and responsive desktop window management experience to the web.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18%2F19-61dafb.svg)](https://reactjs.org/)
+## Key Features
 
-MaoMao Core is a headless-first, stylable window manager library that brings a Desktop Experience to the web. It is engineered for **60FPS performance** using direct DOM manipulation for physics interactions while maintaining React's declarative state for window lifecycle management.
+- **Uncompromised performance:** Zero unnecessary re-renders thanks to context splitting (`useWindows` vs `useWindowActions`).
+- **Complete window lifecycle:** Seamlessly open, close, minimize, maximize, resize, and drag windows.
+- **Built-in snapping:** Native-feeling edge snapping functionality (Windows Aero style).
+- **Responsive design:** Automatically adapts interactions for mobile and desktop environments.
+- **Out-of-the-box Toolbar:** A highly customizable taskbar handling both individual apps and folder groupings.
 
----
+## Installation
 
-## ✨ Features
-
-*   **⚡ Zero-Lag Physics**: Dragging and resizing bypass the React render cycle, directly manipulating DOM for 60FPS smoothness.
-*   **🧲 Window Snapping**: Windows 11-style snap layouts (split screen left/right) with visual preview indicators.
-*   **📱 Responsive Toolbar**: A dynamic Dock/Taskbar that adapts from a desktop dock to a mobile-friendly drawer.
-*   **🧠 Optimized State**: Uses Context Splitting (`State` vs `Dispatch`) to minimize re-renders.
-*   **🔌 Stylable Architecture**: Comes with a base CSS theme that can be easily customized or overridden.
-*   **🧘‍♂️ TypeScript Native**: Built with strict typing for a robust developer experience.
-
----
-
-## 🚀 Quick Start
-
-Integrate a full Desktop environment in 3 steps.
-
-### 1. Install & Import Styles
+Install via your preferred package manager (requires `react` and `react-dom` >= 18.0.0):
 
 ```bash
 npm install @maomaolabs/core
+# or
+yarn add @maomaolabs/core
+# or
+pnpm add @maomaolabs/core
 ```
 
-Import the core styles in your root file (usually `main.tsx` or `App.tsx`):
+## Quick Start
+
+Get a window running in under 30 seconds:
 
 ```tsx
-import '@maomaolabs/core/style.css';
-```
+import { WindowSystemProvider, WindowManager, useWindowActions } from '@maomaolabs/core';
+import '@maomaolabs/core/dist/style.css'; // Critical for native feeling interactions
 
-### 2. Define Your Apps
-Create a list of available applications using the `WindowDefinition` type.
+const AppLauncher = () => {
+  const { openWindow } = useWindowActions();
 
-```tsx
-// config/apps.tsx
-import { WindowDefinition } from '@maomaolabs/core';
-
-export const myApps: WindowDefinition[] = [
-  {
-    id: 'terminal',
-    title: 'Terminal',
-    icon: <span>💻</span>, 
-    component: <div>Hello World</div>,
-    initialSize: { width: 600, height: 400 }
-  },
-  {
-    id: 'settings',
-    title: 'Settings',
-    icon: <span>⚙️</span>,
-    component: <SettingsPage />
-  }
-];
-```
-
-### 3. Setup the Provider & Layout
-Wrap your application root with `WindowStoreProvider`.
-
-```tsx
-// App.tsx
-import { WindowStoreProvider, WindowManager, Toolbar } from '@maomaolabs/core';
-import { myApps } from './config/apps';
+  return (
+    <button onClick={() => openWindow({ 
+      id: 'hello', 
+      title: 'Hello', 
+      component: <div>World!</div> 
+    })}>
+      Launch App
+    </button>
+  );
+};
 
 export default function App() {
   return (
-    <WindowStoreProvider>
-      {/* 
-         1. The Manager renders the active floating windows on top of everything.
-         It has pointer-events: none by default, so background clicks pass through.
-      */}
+    <WindowSystemProvider>
       <WindowManager />
-
-      {/* 2. Your Background / Desktop Area */}
-      <main className="desktop-background">
-        <h1>My Web OS</h1>
-      </main>
-
-      {/* 3. The Dock / Toolbar for launching apps */}
-      <Toolbar windowsOptions={myApps} />
-    </WindowStoreProvider>
+      <AppLauncher />
+    </WindowSystemProvider>
   );
 }
 ```
 
----
+## Detailed Usage Guide
 
-## 📚 API Reference
+### Integrating the Toolbar
+For a full desktop experience, include the `Toolbar` component to manage minimized windows and app launchers, including folder support.
 
-### Components
-
-#### `<WindowStoreProvider>`
-The brain of the operation. Holds the state of all active windows (z-index, minimized status, position, snap state).
-*   **Props**: `children: ReactNode`
-
-#### `<WindowManager>`
-The renderer. It subscribes to the `WindowStore` and renders the list of active windows.
-*   **Behavior**:
-    *   Sits at `z-index: 100`.
-    *   Click-through overlay (only the windows themselves capture clicks).
-
-#### `<Toolbar>`
-A responsive Dock component.
-*   **Props**:
-    *   `windowsOptions`: `WindowDefinition[]` - The list of apps the user can launch.
-*   **Behavior**:
-    *   **Desktop**: Renders a dock at the bottom.
-    *   **Mobile**: Renders a simplified drawer/FAB button with optimized touch targets.
-
-### Hooks
-
-#### `useWindowActions()`
-**Recommended**. Returns functions to control windows **without** subscribing to state changes. Use this to avoid unnecessary re-renders in components that just need to open/close windows.
 ```tsx
-const { openWindow, closeWindow, minimize, maximize } = useWindowActions();
-```
+import { WindowSystemProvider, WindowManager, Toolbar } from '@maomaolabs/core';
 
-#### `useWindows()`
-Returns the array of currently active `WindowInstance` objects. Use this if you need to build a custom taskbar or window list.
-```tsx
-const windows = useWindows();
-// windows = [{ id: 'terminal', title: 'Terminal', isSnapped: true, ... }]
-```
+const DESKTOP_ITEMS = [
+  {
+    id: 'browser-app',
+    title: 'Browser',
+    component: <div />, // Your app component
+    initialSize: { width: 800, height: 600 }
+  },
+  {
+    id: 'games-folder',
+    title: 'Games',
+    apps: [
+      { id: 'minesweeper', title: 'Minesweeper', component: <div /> }
+    ]
+  }
+];
 
----
-
-## 🛠 Type Definitions
-
-### `WindowDefinition` (Configuration)
-The static definition of an application in your system.
-
-```typescript
-type WindowDefinition = {
-  id: string;               // Unique ID
-  title: string;            // Window Title
-  icon?: React.ReactNode;   // Icon (SVG/Emoji/Component)
-  component: React.ReactNode; // The content content
-  initialSize?: { width: number; height: number };
-  initialPosition?: { x: number; y: number };
+export default function Desktop() {
+  return (
+    <WindowSystemProvider>
+      <WindowManager />
+      <Toolbar toolbarItems={DESKTOP_ITEMS} showLogo={true} />
+    </WindowSystemProvider>
+  );
 }
 ```
 
-### `WindowInstance` (Runtime State)
-The active state of a window. Extends `WindowDefinition`.
+### Accessing Window State
+If you need to render UI based on currently open windows (e.g., a custom taskbar), use the `useWindows` hook. **Warning**: This triggers a re-render on any window state change (drag, resize, etc).
 
-```typescript
-type WindowInstance = {
-  // ...WindowDefinition types
-  zIndex: number;
-  isMinimized?: boolean;
-  isMaximized?: boolean;
-  isSnapped?: boolean;
-  size: { width: number; height: number };
-  position: { x: number; y: number };
-}
+```tsx
+import { useWindows } from '@maomaolabs/core';
+
+const OpenAppCounter = () => {
+  const windows = useWindows();
+  return <div>Active apps: {windows.length}</div>;
+};
 ```
 
----
+## API Reference
 
-## ⚙️ Architecture & Performance
+### Core Components
 
-### The "Hybrid State" Model
-One of the biggest challenges in web-based window managers is performance. React's render cycle is too slow for 60FPS dragging and resizing.
+| Component | Description | Props |
+| :--- | :--- | :--- |
+| `<WindowSystemProvider />` | Context provider required for the window system. Wrap your app with this. | `children: ReactNode` |
+| `<WindowManager />` | Renders active windows and snap overlays. Must be inside the provider. | *None* |
+| `<Toolbar />` | Renders the taskbar with app launchers and manages minimized windows. | `toolbarItems: ToolbarItem[]`, `showLogo?: boolean` |
 
-MaoMao Core solves this with a **Hybrid Engine**:
+### Core Hooks
 
-1.  **Macro State (React)**:
-    *   Lifecycle (open/close)
-    *   Z-indexing & Focus
-    *   Min/Max & Snap Status (`isSnapped`)
-    *   *Managed by `WindowStore`.*
+**`useWindowActions()`**
+Returns an object with methods to manipulate windows without subscribing to window state changes.
+* `openWindow(window: WindowDefinition): void` - Opens a new window or focuses it if already open.
+* `closeWindow(id: string): void` - Destroys a window instance.
+* `focusWindow(id: string): void` - Brings a window to the top of the z-index stack.
+* `updateWindow(id: string, data: Partial<WindowInstance>): void` - Patches an existing window's state.
 
-2.  **Micro Physics (DOM)**:
-    *   Dragging (x/y coordinates)
-    *   Resizing (width/height)
-    *   Snap Preview Calculations
-    *   *Managed by `useWindowStatus` hook.*
+**`useWindows()`**
+* Returns: `WindowInstance[]` - The list of all currently active window instances.
 
-**How it works:**
-When you drag a window, the library **bypasses React** and directly updates the `div.style.transform`. Only when you release the mouse (`mouseup`) does it sync the final position back to React state. This ensures butter-smooth window movement even if the window contains heavy components (like Data Grids or Maps).
+**`useWindowSnap()`**
+* Returns: `{ snapPreview: { side: 'left' | 'right' } | null, setSnapPreview: (preview: { side: 'left' | 'right' } | null) => void }`
 
----
+### Interfaces
 
-## 🎨 Styling
+**`WindowDefinition`** (Used for opening windows)
 
-The library uses **CSS Modules** effectively, but exposes a global `style.css` for base structural styles.
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `id` | `string` | **Required.** Unique identifier for the window instance. |
+| `title` | `string` | **Required.** Text displayed in the window header. |
+| `component` | `React.ReactNode` | **Required.** The view to be rendered inside the window. |
+| `icon` | `React.ReactNode` | Optional element (e.g., SVG/image) for headers/toolbars. |
+| `initialSize` | `{ width: number; height: number }` | Optional starting dimensions. |
+| `initialPosition` | `{ x: number; y: number }` | Optional starting coordinates. |
+| `layer` | `'base' \| 'normal' \| 'alwaysOnTop' \| 'modal'` | Window render priority layer. |
+| `isMaximized` | `boolean` | If true, spawns the window spanning the screen. |
+| `canMinimize` | `boolean` | Allows the user to hide the window. |
+| `canMaximize` | `boolean` | Allows the user to toggle screen-spanning. |
+| `canClose` | `boolean` | Allows the user to destroy the window. |
 
-To customize the look:
-1.  **Override CSS Variables**: Check `dist/style.css` for available variables.
-2.  **Global Overrides**: Target classes like `.window-container`, `.window-header`, etc.
+**`FolderDefinition`** (Used within Toolbars to group apps)
 
----
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `id` | `string` | **Required.** Unique identifier for the folder. |
+| `title` | `string` | **Required.** Folder name. |
+| `apps` | `WindowDefinition[]` | **Required.** Array of windows contained within. |
+| `icon` | `React.ReactNode` | Optional visual descriptor. |
 
-## 📄 License
+*Note: `ToolbarItem` is a union type of `WindowDefinition | FolderDefinition`.*
 
-MIT © MaoMao Labs
+## Configuration
+
+This library does not use environment variables. Styling behavior is primarily managed via the required CSS import:
+
+```tsx
+import '@maomaolabs/core/dist/style.css';
+```
+Ensure your Vite/Webpack setup is configured to import and bundle CSS from `node_modules`.
+
+## Contribution
+
+We welcome PRs. To run locally:
+1. `npm install`
+2. `npm run dev` to watch changes and test locally.
+3. `npm run test` before committing to ensure Vitest suites pass.
+
+## License
+
+MIT License. See `LICENSE` for more information.

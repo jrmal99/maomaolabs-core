@@ -6,12 +6,12 @@ import { WindowDefinition, WindowInstance } from "../../../types";
 export const MobileOptionItem = memo(({ window, currentWindows, openWindow, closeMenu }: {
   window: WindowDefinition,
   currentWindows: WindowInstance[],
-  openWindow: (w: WindowInstance) => void,
+  openWindow: (w: WindowDefinition) => void,
   closeMenu: () => void
 }) => {
   const isActive = currentWindows.some((ow) => ow.id === window.id);
   const handleOpen = useCallback(() => {
-    openWindow({ ...window, zIndex: 0 } as WindowInstance);
+    openWindow(window);
     closeMenu();
   }, [openWindow, window, closeMenu]);
 

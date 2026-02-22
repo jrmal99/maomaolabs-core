@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { DEFAULT_POSITION, DEFAULT_SIZE } from './constants';
 import { useDrag } from './useDrag';
 import { useResize } from './useResize';
@@ -14,6 +14,8 @@ export interface WindowStatusProps {
   onSnap?: (side: SnapSide) => void;
   onUnsnap?: () => void;
   setSnapPreview?: (preview: { side: SnapSide } | null) => void;
+  onPositionChange?: (pos: Position) => void;
+  onSizeChange?: (size: Size) => void;
 }
 
 export function useWindowStatus({
@@ -22,17 +24,20 @@ export function useWindowStatus({
   isSnapped,
   onSnap,
   onUnsnap,
-  setSnapPreview
+  setSnapPreview,
+  onPositionChange,
+  onSizeChange
 }: WindowStatusProps) {
   const [size, setSize] = useState<Size>(initialSize);
   const [position, setPosition] = useState<Position>(initialPosition);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
 
   useEffect(() => setSize(initialSize), [initialSize]);
   useEffect(() => setPosition(initialPosition), [initialPosition]);
 
   const lastSize = useRef(size);
   const lastPosition = useRef(position);
-
   const windowRef = useRef<HTMLDivElement>(null);
 
   const updateLastPosition = useCallback((pos: Position) => {
@@ -47,6 +52,16 @@ export function useWindowStatus({
   const drag = useDrag(size, position, windowRef, updateLastPosition, snap.detectSnap);
   const resize = useResize(size, windowRef, updateLastSize);
 
+  const startDrag = useCallback((e: React.MouseEvent) => {
+    setIsDragging(true);
+    drag.startDrag(e);
+  }, [drag]);
+
+  const startResize = useCallback((e: React.MouseEvent) => {
+    setIsResizing(true);
+    resize.startResize(e);
+  }, [resize]);
+
   useEffect(() => {
     const move = (e: MouseEvent) => {
       drag.dragTo(e);
@@ -58,14 +73,20 @@ export function useWindowStatus({
         if (snap.currentSide.current && onSnap) {
           onSnap(snap.currentSide.current);
           snap.resetSnap();
-        } else setPosition(lastPosition.current);
+        } else {
+          setPosition(lastPosition.current);
+          onPositionChange?.(lastPosition.current);
+        }
         drag.stopDrag();
+        setIsDragging(false);
       }
 
       if (resize.isResizing.current) {
         setSize(lastSize.current);
+        onSizeChange?.(lastSize.current);
         if (isSnapped) onUnsnap?.();
         resize.stopResize();
+        setIsResizing(false);
       }
     };
 
@@ -75,26 +96,15 @@ export function useWindowStatus({
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseup', end);
     };
-  }, [drag, resize, onSnap, onUnsnap, isSnapped, snap]);
+  }, [drag, resize, onSnap, onUnsnap, isSnapped, snap, onPositionChange, onSizeChange]);
 
-  /**
-   * Returns window state and interaction handlers
-   * @returns {Object} Window status object
-   * @property {Size} size - Current window size
-   * @property {Position} position - Current window position
-   * @property {React.RefObject<HTMLDivElement>} windowRef - Reference to window DOM element
-   * @property {Function} drag - Function to initiate drag operation
-   * @property {Function} resize - Function to initiate resize operation
-   * @property {boolean} isDragging - Whether window is currently being dragged
-   * @property {boolean} isResizing - Whether window is currently being resized
-   */
-  return {
+  return useMemo(() => ({
     size,
     position,
     windowRef,
-    drag: drag.startDrag,
-    resize: resize.startResize,
-    isDragging: drag.isDragging.current,
-    isResizing: resize.isResizing.current
-  };
+    drag: startDrag,
+    resize: startResize,
+    isDragging,
+    isResizing
+  }), [size, position, isDragging, isResizing, startDrag, startResize]);
 }

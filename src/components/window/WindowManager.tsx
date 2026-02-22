@@ -1,19 +1,19 @@
 'use client'
 
-import { useWindows, useWindowActions } from '../../store/window-context'
+import { useWindows, useWindowActions, useWindowSnap } from '../../store/window-system-context'
 import Window from './Window'
 import SnapOverlay from './SnapOverlay'
 import styles from '../../styles/WindowManager.module.css'
 
 /**
  * Main window manager component.
- * Renders all active windows managed by the WindowStore.
+ * Renders all active windows managed by the WindowSystemProvider.
  * 
  * @returns {JSX.Element} The window manager container.
  */
 export default function WindowManager() {
   const windows = useWindows()
-  const { snapPreview } = useWindowActions()
+  const { snapPreview } = useWindowSnap()
 
   return (
     <div className={styles.manager}>

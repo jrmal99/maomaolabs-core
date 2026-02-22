@@ -1,20 +1,21 @@
 import React from 'react'
-import commonStyles from '../../../styles/toolbar/Toolbar.module.css'
 import styles from '../../../styles/toolbar/ToolbarDesktop.module.css'
-import { WindowInstance, ToolbarItem, FolderDefinition } from "../../../types"
+import { WindowInstance, ToolbarItem, WindowDefinition } from "../../../types"
 import SleepyMao from '../common/SleepyMao'
 import { OptionButtonItem } from './OptionButtonItem'
 import { FolderItem } from './FolderItem'
 import { WindowButtonItem } from './WindowButtonItem'
+import { useToolbarItems } from '../../../hooks/useToolbarItems'
 
 type ToolbarDesktopProps = {
-  openWindow: (window: WindowInstance) => void
+  openWindow: (window: WindowDefinition) => void
   closeWindow: (windowId: string) => void
-  windowsOptions: ToolbarItem[]
+  toolbarItems: ToolbarItem[]
   currentWindows: WindowInstance[]
   isOpen: boolean
   toggleOpen: () => void
   setIsOpen: (isOpen: boolean) => void
+  showLogo?: boolean
 }
 
 const CAT_ICONS = {
@@ -23,20 +24,19 @@ const CAT_ICONS = {
   open: '/\\_/\\\n( ^.^ )\n> ^ <',
 } as const
 
-function isFolder(item: ToolbarItem): item is FolderDefinition {
-  return 'apps' in item
-}
-
 export default function ToolbarDesktop({
   openWindow,
   closeWindow,
-  windowsOptions = [],
+  toolbarItems = [],
   currentWindows,
   isOpen,
   toggleOpen,
-  setIsOpen
+  setIsOpen,
+  showLogo = true
 }: ToolbarDesktopProps) {
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null)
+
+  const { windowsOptions, isFolder } = useToolbarItems(toolbarItems, currentWindows)
 
   const currentIcon = isOpen
     ? CAT_ICONS.open
@@ -75,7 +75,11 @@ export default function ToolbarDesktop({
   }, [])
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      role="toolbar"
+      aria-label="Desktop Toolbar"
+    >
       {/* 1. Left Menu */}
       <div className={`${styles.menuLeft} ${currentWindows.length > 0 ? styles.menuOpen : styles.menuClosed}`}>
         <div className={styles.menuContentLeft}>
@@ -101,11 +105,22 @@ export default function ToolbarDesktop({
           <button
             className={styles.launcher}
             onClick={toggleOpen}
+            aria-label={isOpen ? "Close Menu" : "Open Menu"}
+            aria-expanded={isOpen}
           >
-            <SleepyMao show={!isOpen && currentWindows.length === 0} />
-            <span className={`${styles.catIcon}`}>
-              {currentIcon}
-            </span>
+            {showLogo && (
+              <>
+                <SleepyMao show={!isOpen && currentWindows.length === 0} />
+                <span className={`${styles.catIcon}`}>
+                  {currentIcon}
+                </span>
+              </>
+            )}
+            {!showLogo && (
+              <span className={styles.catIcon} style={{ fontSize: '1.5rem' }}>
+                🪟
+              </span>
+            )}
           </button>
         </div>
       </div>
