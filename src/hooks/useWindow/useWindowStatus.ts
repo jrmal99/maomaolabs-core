@@ -14,6 +14,8 @@ export interface WindowStatusProps {
   onSnap?: (side: SnapSide) => void;
   onUnsnap?: () => void;
   setSnapPreview?: (preview: { side: SnapSide } | null) => void;
+  onPositionChange?: (pos: Position) => void;
+  onSizeChange?: (size: Size) => void;
 }
 
 export function useWindowStatus({
@@ -22,7 +24,9 @@ export function useWindowStatus({
   isSnapped,
   onSnap,
   onUnsnap,
-  setSnapPreview
+  setSnapPreview,
+  onPositionChange,
+  onSizeChange
 }: WindowStatusProps) {
   const [size, setSize] = useState<Size>(initialSize);
   const [position, setPosition] = useState<Position>(initialPosition);
@@ -71,6 +75,7 @@ export function useWindowStatus({
           snap.resetSnap();
         } else {
           setPosition(lastPosition.current);
+          onPositionChange?.(lastPosition.current);
         }
         drag.stopDrag();
         setIsDragging(false);
@@ -78,6 +83,7 @@ export function useWindowStatus({
 
       if (resize.isResizing.current) {
         setSize(lastSize.current);
+        onSizeChange?.(lastSize.current);
         if (isSnapped) onUnsnap?.();
         resize.stopResize();
         setIsResizing(false);
@@ -90,7 +96,7 @@ export function useWindowStatus({
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseup', end);
     };
-  }, [drag, resize, onSnap, onUnsnap, isSnapped, snap]);
+  }, [drag, resize, onSnap, onUnsnap, isSnapped, snap, onPositionChange, onSizeChange]);
 
   return useMemo(() => ({
     size,

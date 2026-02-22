@@ -5,16 +5,10 @@ import { WindowDefinition, WindowInstance } from '../../../types';
 export const OptionButtonItem = memo(({ window, currentWindows, openWindow }: {
   window: WindowDefinition,
   currentWindows: WindowInstance[],
-  openWindow: (w: WindowInstance) => void
+  openWindow: (w: WindowDefinition) => void
 }) => {
   const isActive = currentWindows.some((ow) => ow.id === window.id);
-  const handleOpen = useCallback(() => openWindow({
-    ...window,
-    zIndex: 0,
-    layer: window.layer || 'normal',
-    size: window.initialSize,
-    position: window.initialPosition
-  } as WindowInstance), [openWindow, window]);
+  const handleOpen = useCallback(() => openWindow(window), [openWindow, window]);
 
   return (
     <ToolbarButton

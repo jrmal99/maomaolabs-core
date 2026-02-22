@@ -27,7 +27,7 @@ const { mockUseWindowActions, mockUseWindowSnap, mockUseWindowStatus, MockWindow
   };
 });
 
-vi.mock('../../../store/window-context', () => ({
+vi.mock('../../../store/window-system-context', () => ({
   useWindowActions: () => mockUseWindowActions,
   useWindowSnap: () => mockUseWindowSnap
 }));
@@ -46,7 +46,9 @@ describe('Window', () => {
     title: 'Test Window',
     component: <div>Window Content</div>,
     zIndex: 100,
-    layer: 'normal'
+    layer: 'normal',
+    size: { width: 400, height: 300 },
+    position: { x: 100, y: 100 }
   };
 
   const originalRAF = global.requestAnimationFrame;

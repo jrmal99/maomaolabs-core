@@ -2,12 +2,13 @@
 
 import React, { useMemo, useCallback } from 'react'
 import { WindowContext } from './WindowContext'
-import { useWindowActions, useWindowSnap } from '../../store/window-context'
+import { useWindowActions, useWindowSnap } from '../../store/window-system-context'
 import { useWindowStatus } from '../../hooks/useWindow/useWindowStatus'
 import WindowHeader from './WindowHeader'
 
 import styles from '../../styles/Window.module.css'
 import { WindowProps, WindowContextState } from '../../types'
+import { ANIMATION_DURATION } from '../../store/constants'
 
 
 /**
@@ -24,13 +25,20 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
 
+  const timeoutRef = React.useRef<any>(null);
+
   React.useEffect(() => {
-    requestAnimationFrame(() => setIsOpen(true));
+    let animationFrameId: number;
+    animationFrameId = requestAnimationFrame(() => setIsOpen(true));
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
 
   const handleClose = useCallback(() => {
     setIsClosing(true);
-    setTimeout(() => { closeWindow(windowInstance.id); }, 200);
+    timeoutRef.current = setTimeout(() => { closeWindow(windowInstance.id); }, ANIMATION_DURATION);
   }, [closeWindow, windowInstance.id]);
 
   const handleMinimize = useCallback(() => {
@@ -63,6 +71,14 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
     updateWindow(windowInstance.id, { isSnapped: false });
   }, [updateWindow, windowInstance.id]);
 
+  const handlePositionChange = React.useCallback((pos: { x: number, y: number }) => {
+    updateWindow(windowInstance.id, { position: pos });
+  }, [updateWindow, windowInstance.id]);
+
+  const handleSizeChange = React.useCallback((sz: { width: number, height: number }) => {
+    updateWindow(windowInstance.id, { size: sz });
+  }, [updateWindow, windowInstance.id]);
+
   const {
     size,
     position,
@@ -79,7 +95,9 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
     isSnapped: windowInstance.isSnapped || false,
     onSnap: handleSnap,
     onUnsnap: handleUnsnap,
-    setSnapPreview
+    setSnapPreview,
+    onPositionChange: handlePositionChange,
+    onSizeChange: handleSizeChange
   })
 
   const uiValue: WindowContextState = useMemo(() => ({
@@ -107,6 +125,10 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
       <div
         ref={windowRef}
         id={`window-${windowInstance.id}`}
+        role="dialog"
+        aria-label={windowInstance.title}
+        aria-modal="false"
+        tabIndex={-1}
         className={`window-container
             ${styles.container}
             ${!isDragging && !isResizing ? `${styles.transition} window-transition` : ''}
@@ -135,7 +157,7 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
           className={`window-scrollbar ${styles.scrollbar} ${styles.content}`}
           style={{ display: isMinimized ? 'none' : 'flex' }}
         >
-          {!isMinimized && windowInstance.component}
+          {windowInstance.component}
         </div>
 
         {!isMaximized && (

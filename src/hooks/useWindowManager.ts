@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { WindowInstance } from '../types';
+import { WindowInstance, WindowDefinition } from '../types';
 import { MOBILE_BREAKPOINT } from '../store/constants';
 
 /**
@@ -9,28 +9,47 @@ import { MOBILE_BREAKPOINT } from '../store/constants';
 export function useWindowManager() {
   const [windows, setWindows] = useState<WindowInstance[]>([]);
 
-  const openWindow = useCallback((windowInstance: WindowInstance) => {
+  const openWindow = useCallback((windowDef: WindowDefinition) => {
     const isMobile = typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT;
 
     setWindows((prev) => {
-      if (prev.some(w => w.id === windowInstance.id)) {
-        const maxZ = Math.max(0, ...prev.map(w => w.zIndex));
-        return prev.map(w => w.id === windowInstance.id
-          ? { ...w, zIndex: maxZ + 1, isMinimized: false }
-          : w
-        );
+      if (prev.some(w => w.id === windowDef.id)) {
+        const sorted = [...prev].sort((a, b) => a.zIndex - b.zIndex);
+        const others = sorted.filter(w => w.id !== windowDef.id);
+        const target = prev.find(w => w.id === windowDef.id)!;
+
+        const reordered = [...others, target];
+
+        return reordered.map((w, index) => ({
+          ...w,
+          zIndex: index + 1,
+          isMinimized: w.id === windowDef.id ? false : w.isMinimized
+        }));
       }
 
-      const maxZ = Math.max(0, ...prev.map(w => w.zIndex));
-      const newWindow = {
-        ...windowInstance,
-        zIndex: maxZ + 1,
-        isMaximized: isMobile ? true : windowInstance.isMaximized
+      const sorted = [...prev].sort((a, b) => a.zIndex - b.zIndex);
+
+      const inputAsInstance = windowDef as Partial<WindowInstance>;
+
+      const { initialSize, initialPosition, ...restWindowDef } = windowDef;
+
+      const newWindow: WindowInstance = {
+        ...restWindowDef,
+        zIndex: prev.length + 1,
+        isMinimized: false,
+        isMaximized: isWindowMaximized(isMobile, windowDef.isMaximized || false),
+        isSnapped: inputAsInstance.isSnapped,
+        size: inputAsInstance.size || initialSize || { width: 400, height: 300 },
+        position: inputAsInstance.position || initialPosition || { x: 50, y: 50 },
       };
 
-      return [...prev, newWindow];
+      const all = [...sorted, newWindow];
+      return all.map((w, index) => ({ ...w, zIndex: index + 1 }));
     });
   }, []);
+
+  const isWindowMaximized = (isMobile: boolean, isMaximizedByDefault: boolean) =>
+    isMobile || isMaximizedByDefault;
 
   const closeWindow = useCallback((id: string) => {
     setWindows((prev) => prev.filter(w => w.id !== id));
@@ -41,14 +60,15 @@ export function useWindowManager() {
       const windowToFocus = prev.find(w => w.id === id);
       if (!windowToFocus) return prev;
 
-      const maxZ = Math.max(0, ...prev.map(w => w.zIndex));
+      const sorted = [...prev].sort((a, b) => a.zIndex - b.zIndex);
+      const others = sorted.filter(w => w.id !== id);
+      const reordered = [...others, windowToFocus];
 
-      if (windowToFocus.zIndex === maxZ && !windowToFocus.isMinimized) return prev;
-
-      return prev.map(w => w.id === id
-        ? { ...w, zIndex: maxZ + 1, isMinimized: false }
-        : w
-      );
+      return reordered.map((w, index) => ({
+        ...w,
+        zIndex: index + 1,
+        isMinimized: w.id === id ? false : w.isMinimized
+      }));
     });
   }, []);
 

@@ -10,3 +10,5 @@ export const Z_INDEX_LAYERS = {
   alwaysOnTop: 1000,
   modal: 2000,
 } as const;
+
+export const ANIMATION_DURATION = 200;

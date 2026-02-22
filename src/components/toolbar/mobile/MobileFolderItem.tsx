@@ -1,7 +1,7 @@
 
 import { memo, useCallback, useState } from 'react';
 import styles from '../../../styles/toolbar/ToolbarMobile.module.css';
-import { WindowInstance, FolderDefinition } from "../../../types";
+import { WindowInstance, FolderDefinition, WindowDefinition } from "../../../types";
 import ToolbarButton from "../common/ToolbarButton";
 import { FolderIcon } from '../desktop/FolderIcon';
 import { MobileOptionItem } from './MobileOptionItem';
@@ -9,7 +9,7 @@ import { MobileOptionItem } from './MobileOptionItem';
 export const MobileFolderItem = memo(({ folder, currentWindows, openWindow, closeMenu }: {
   folder: FolderDefinition,
   currentWindows: WindowInstance[],
-  openWindow: (w: WindowInstance) => void,
+  openWindow: (w: WindowDefinition) => void,
   closeMenu: () => void
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);

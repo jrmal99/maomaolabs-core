@@ -1,7 +1,7 @@
 import { memo, useCallback, useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../../../styles/toolbar/ToolbarDesktop.module.css'
-import { WindowInstance, FolderDefinition } from "../../../types";
+import { WindowInstance, FolderDefinition, WindowDefinition } from "../../../types";
 import ToolbarButton from "../common/ToolbarButton";
 import { FolderIcon } from './FolderIcon';
 import { OptionButtonItem } from './OptionButtonItem';
@@ -9,7 +9,7 @@ import { OptionButtonItem } from './OptionButtonItem';
 export const FolderItem = memo(({ folder, currentWindows, openWindow }: {
   folder: FolderDefinition,
   currentWindows: WindowInstance[],
-  openWindow: (w: WindowInstance) => void
+  openWindow: (w: WindowDefinition) => void
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);

@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
-import { WindowInstance, WindowStore } from '../types';
+import { WindowInstance, WindowSystemProvider } from '../types';
 
-export type WindowDispatch = Omit<WindowStore, 'windows' | 'snapPreview' | 'setSnapPreview'>;
+export type WindowDispatch = Omit<WindowSystemProvider, 'windows' | 'snapPreview' | 'setSnapPreview'>;
 
 export const WindowStateContext = createContext<WindowInstance[] | null>(null);
 export const WindowDispatchContext = createContext<WindowDispatch | null>(null);
@@ -16,7 +16,7 @@ export const WindowSnapContext = createContext<{
  */
 export function useWindowActions() {
   const dispatch = useContext(WindowDispatchContext);
-  if (!dispatch) throw new Error('useWindowActions must be used within WindowStoreProvider');
+  if (!dispatch) throw new Error('useWindowActions must be used within WindowSystemProviderProvider');
   return dispatch;
 }
 
@@ -26,7 +26,7 @@ export function useWindowActions() {
  */
 export function useWindowSnap() {
   const context = useContext(WindowSnapContext);
-  if (!context) throw new Error('useWindowSnap must be used within WindowStoreProvider');
+  if (!context) throw new Error('useWindowSnap must be used within WindowSystemProviderProvider');
   return context;
 }
 
@@ -36,6 +36,6 @@ export function useWindowSnap() {
  */
 export function useWindows() {
   const state = useContext(WindowStateContext);
-  if (state === null) throw new Error('useWindows must be used within WindowStoreProvider');
+  if (state === null) throw new Error('useWindows must be used within WindowSystemProviderProvider');
   return state;
 }

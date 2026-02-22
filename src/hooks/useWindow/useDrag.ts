@@ -34,6 +34,8 @@ export function useDrag(
   }, [size, onMove, onSnapCheck]);
 
   const startDrag = useCallback((e: React.MouseEvent) => {
+    window.getSelection()?.removeAllRanges();
+    document.body.style.userSelect = "none";
     start.current = {
       x: e.clientX - position.x,
       y: e.clientY - position.y
@@ -43,6 +45,7 @@ export function useDrag(
 
   const stopDrag = useCallback(() => {
     isDragging.current = false;
+    document.body.style.userSelect = "auto";
   }, []);
 
   return useMemo(() => ({

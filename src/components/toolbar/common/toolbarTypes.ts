@@ -1,4 +1,4 @@
-import { WindowDefinition } from "../../../types";
+import { ToolbarItem } from "../../../types";
 
 export type ToolbarAction = {
   id: string;
@@ -13,8 +13,9 @@ export type ToolbarState = 'idle' | 'active' | 'open';
  * ToolbarProps type.
  * Defines the properties of the toolbar.
  * 
- * @property {WindowDefinition[]} windows - The windows to be displayed in the toolbar.
+ * @property {ToolbarItem[]} toolbarItems - The windows to be displayed in the toolbar.
  */
 export type ToolbarProps = {
-  windowsOptions: WindowDefinition[];
+  toolbarItems: ToolbarItem[];
+  showLogo?: boolean;
 }

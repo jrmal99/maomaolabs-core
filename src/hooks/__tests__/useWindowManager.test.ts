@@ -87,6 +87,6 @@ describe('useWindowManager', () => {
 
     const secondState = result.current.windows;
 
-    expect(secondState).toBe(firstState);
+    expect(secondState).toStrictEqual(firstState);
   });
 });

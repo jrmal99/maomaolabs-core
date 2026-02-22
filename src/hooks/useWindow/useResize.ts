@@ -25,12 +25,15 @@ export function useResize(
   }, [onResizeEnd]);
 
   const startResize = useCallback((e: React.MouseEvent) => {
+    window.getSelection()?.removeAllRanges();
+    document.body.style.userSelect = "none";
     start.current = { x: e.clientX, y: e.clientY, w: size.width, h: size.height };
     isResizing.current = true;
   }, [size.width, size.height]);
 
   const stopResize = useCallback(() => {
     isResizing.current = false;
+    document.body.style.userSelect = "auto";
   }, []);
 
   return useMemo(() => ({

@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '../../../styles/toolbar/ToolbarDesktop.module.css'
-import { WindowInstance, ToolbarItem } from "../../../types"
+import { WindowInstance, ToolbarItem, WindowDefinition } from "../../../types"
 import SleepyMao from '../common/SleepyMao'
 import { OptionButtonItem } from './OptionButtonItem'
 import { FolderItem } from './FolderItem'
@@ -8,13 +8,14 @@ import { WindowButtonItem } from './WindowButtonItem'
 import { useToolbarItems } from '../../../hooks/useToolbarItems'
 
 type ToolbarDesktopProps = {
-  openWindow: (window: WindowInstance) => void
+  openWindow: (window: WindowDefinition) => void
   closeWindow: (windowId: string) => void
-  windowsOptions: ToolbarItem[]
+  toolbarItems: ToolbarItem[]
   currentWindows: WindowInstance[]
   isOpen: boolean
   toggleOpen: () => void
   setIsOpen: (isOpen: boolean) => void
+  showLogo?: boolean
 }
 
 const CAT_ICONS = {
@@ -26,15 +27,16 @@ const CAT_ICONS = {
 export default function ToolbarDesktop({
   openWindow,
   closeWindow,
-  windowsOptions: rawWindowsOptions = [],
+  toolbarItems = [],
   currentWindows,
   isOpen,
   toggleOpen,
-  setIsOpen
+  setIsOpen,
+  showLogo = true
 }: ToolbarDesktopProps) {
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null)
 
-  const { windowsOptions, isFolder } = useToolbarItems(rawWindowsOptions, currentWindows)
+  const { windowsOptions, isFolder } = useToolbarItems(toolbarItems, currentWindows)
 
   const currentIcon = isOpen
     ? CAT_ICONS.open
@@ -106,10 +108,19 @@ export default function ToolbarDesktop({
             aria-label={isOpen ? "Close Menu" : "Open Menu"}
             aria-expanded={isOpen}
           >
-            <SleepyMao show={!isOpen && currentWindows.length === 0} />
-            <span className={`${styles.catIcon}`}>
-              {currentIcon}
-            </span>
+            {showLogo && (
+              <>
+                <SleepyMao show={!isOpen && currentWindows.length === 0} />
+                <span className={`${styles.catIcon}`}>
+                  {currentIcon}
+                </span>
+              </>
+            )}
+            {!showLogo && (
+              <span className={styles.catIcon} style={{ fontSize: '1.5rem' }}>
+                🪟
+              </span>
+            )}
           </button>
         </div>
       </div>
