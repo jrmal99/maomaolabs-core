@@ -63,6 +63,8 @@ export function useWindowStatus({
   }, [resize]);
 
   useEffect(() => {
+    if (!isDragging && !isResizing) return;
+
     const move = (e: MouseEvent) => {
       drag.dragTo(e);
       resize.resizeTo(e);
@@ -101,7 +103,7 @@ export function useWindowStatus({
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseup', end);
     };
-  }, [drag, resize, onSnap, onUnsnap, isSnapped, snap, onPositionChange, onSizeChange]);
+  }, [drag, resize, onSnap, onUnsnap, isSnapped, snap, onPositionChange, onSizeChange, isDragging, isResizing]);
 
   return useMemo(() => ({
     size,
