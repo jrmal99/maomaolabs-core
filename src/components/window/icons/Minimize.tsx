@@ -3,6 +3,7 @@ import styles from '../../../styles/WindowControls.module.css'
 type Props = {
   onClick: () => void
   isMinimized: boolean
+  disabled?: boolean
 }
 
 export const MinimizeIcon = () => (
@@ -11,12 +12,12 @@ export const MinimizeIcon = () => (
   </svg>
 )
 
-export function MinimizeButton({ onClick, isMinimized }: Props) {
+export function MinimizeButton({ onClick, isMinimized, disabled }: Props) {
   return (
     <button
       className={`terminal-btn ${styles.button}`}
       onClick={() => { onClick(); }}
-      disabled={isMinimized}
+      disabled={disabled || isMinimized}
       title={isMinimized ? "Restore" : "Minimize"}
     >
       <MinimizeIcon />

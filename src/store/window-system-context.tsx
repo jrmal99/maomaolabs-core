@@ -6,8 +6,8 @@ export type WindowDispatch = Omit<WindowSystemProvider, 'windows' | 'snapPreview
 export const WindowStateContext = createContext<WindowInstance[] | null>(null);
 export const WindowDispatchContext = createContext<WindowDispatch | null>(null);
 export const WindowSnapContext = createContext<{
-  snapPreview: { side: 'left' | 'right' } | null;
-  setSnapPreview: (preview: { side: 'left' | 'right' } | null) => void;
+  snapPreview: { side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' } | null;
+  setSnapPreview: (preview: { side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' } | null) => void;
 } | null>(null);
 
 /**

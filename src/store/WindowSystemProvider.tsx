@@ -8,7 +8,7 @@ import {
 } from './window-system-context';
 import { useWindowManager } from '../hooks/useWindowManager';
 
-type SnapSide = 'left' | 'right';
+type SnapSide = 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 
 interface SnapPreview {
   side: SnapSide;

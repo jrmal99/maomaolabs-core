@@ -70,11 +70,16 @@ export function useWindowStatus({
 
     const end = () => {
       if (drag.isDragging.current) {
+        // ALWAYS update the React state with the physically dragged position
+        // This ensures the VDOM knows where the element physically ended up (manually mutated via ref)
+        // so that if onSnap passes an identical VDOM coordinate, React still
+        // sees the difference and commits the style to the DOM correctly.
+        setPosition(lastPosition.current);
+
         if (snap.currentSide.current && onSnap) {
           onSnap(snap.currentSide.current);
           snap.resetSnap();
         } else {
-          setPosition(lastPosition.current);
           onPositionChange?.(lastPosition.current);
         }
         drag.stopDrag();

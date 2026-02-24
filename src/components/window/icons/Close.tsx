@@ -7,14 +7,16 @@ const CloseIcon = () => (
 )
 
 type Props = {
-  onClose: (e?:  React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  onClose: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  disabled?: boolean
 }
 
-export function CloseButton({ onClose }: Props) {
+export function CloseButton({ onClose, disabled }: Props) {
   return (
     <button
       className={`terminal-btn close ${styles.button} ${styles.close}`}
       onClick={onClose}
+      disabled={disabled}
       title="Close"
     >
       <CloseIcon />

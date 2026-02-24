@@ -6,7 +6,7 @@
 
 - **Uncompromised performance:** Zero unnecessary re-renders thanks to context splitting (`useWindows` vs `useWindowActions`).
 - **Complete window lifecycle:** Seamlessly open, close, minimize, maximize, resize, and drag windows.
-- **Built-in snapping:** Native-feeling edge snapping functionality (Windows Aero style).
+- **Built-in snapping:** Native-feeling edge snapping (half screen) and corner snapping (quarter screen) functionality.
 - **Responsive design:** Automatically adapts interactions for mobile and desktop environments.
 - **Out-of-the-box Toolbar:** A highly customizable taskbar handling both individual apps and folder groupings.
 
@@ -123,7 +123,7 @@ Returns an object with methods to manipulate windows without subscribing to wind
 * Returns: `WindowInstance[]` - The list of all currently active window instances.
 
 **`useWindowSnap()`**
-* Returns: `{ snapPreview: { side: 'left' | 'right' } | null, setSnapPreview: (preview: { side: 'left' | 'right' } | null) => void }`
+* Returns: `{ snapPreview: { side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' } | null, setSnapPreview: Function }`
 
 ### Interfaces
 

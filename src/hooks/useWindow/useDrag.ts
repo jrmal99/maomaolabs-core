@@ -6,7 +6,7 @@ export function useDrag(
   position: Position,
   windowRef: React.RefObject<HTMLDivElement>,
   onMove: (pos: Position) => void,
-  onSnapCheck?: (x: number) => void
+  onSnapCheck?: (x: number, y: number) => void
 ) {
   const isDragging = useRef(false);
   const start = useRef({ x: 0, y: 0 });
@@ -14,7 +14,7 @@ export function useDrag(
   const dragTo = useCallback((e: MouseEvent) => {
     if (!isDragging.current) return;
 
-    onSnapCheck?.(e.clientX);
+    onSnapCheck?.(e.clientX, e.clientY);
 
     const x = Math.min(
       Math.max(0, e.clientX - start.current.x),

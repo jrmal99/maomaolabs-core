@@ -81,6 +81,6 @@ describe('useDrag', () => {
       result.current.dragTo({ clientX: 50, clientY: 50 } as MouseEvent);
     });
 
-    expect(onSnapCheck).toHaveBeenCalledWith(50);
+    expect(onSnapCheck).toHaveBeenCalledWith(50, 50);
   });
 });
