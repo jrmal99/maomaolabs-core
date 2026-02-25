@@ -25,13 +25,13 @@ Zero unnecessary re-renders thanks to context splitting (`useWindows` vs `useWin
 **Complete window lifecycle**  
 Seamlessly open, close, minimize, maximize, resize, and drag windows.
 <p align="center">
-  <img src="./docs/assets/4.gif" alt="Window lifecycle demonstration" width="100%" style="border-radius: 8px;" />
+  <video src="./docs/assets/4.webm" autoplay loop muted playsinline width="100%" style="border-radius: 8px;" aria-label="Window lifecycle demonstration"></video>
 </p>
 
 **Built-in snapping**  
 Native-feeling edge snapping (half screen) and corner snapping (quarter screen) functionality.
 <p align="center">
-  <img src="./docs/assets/5.gif" alt="Window snapping demonstration" width="100%" style="border-radius: 8px;" />
+  <video src="./docs/assets/5.webm" autoplay loop muted playsinline width="100%" style="border-radius: 8px;" aria-label="Window snapping demonstration"></video>
 </p>
 
 **Responsive design**  
