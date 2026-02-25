@@ -3,6 +3,7 @@ import styles from '../../../styles/WindowControls.module.css'
 type Props = {
   onClick: () => void
   isMaximized: boolean
+  disabled?: boolean
 }
 
 const MaximizeIcon = () => (
@@ -18,11 +19,12 @@ const RestoreIcon = () => (
   </svg>
 )
 
-export function MaximizeButton({ onClick, isMaximized }: Props) {
+export function MaximizeButton({ onClick, isMaximized, disabled }: Props) {
   return (
     <button
       className={`terminal-btn ${styles.button}`}
       onClick={() => { onClick() }}
+      disabled={disabled}
       title={isMaximized ? "Restore" : "Maximize"}
     >
       {isMaximized ? <RestoreIcon /> : <MaximizeIcon />}

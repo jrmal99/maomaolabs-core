@@ -53,17 +53,40 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
     updateWindow(windowInstance.id, { isMinimized: false, isMaximized: false, isSnapped: false });
   }, [updateWindow, windowInstance.id]);
 
-  const handleSnap = React.useCallback((side: 'left' | 'right') => {
-    const width = window.innerWidth / 2;
-    const height = window.innerHeight;
-    const x = side === 'left' ? 0 : width;
+  const handleSnap = React.useCallback((side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
+    let width = window.innerWidth / 2;
+    let height = window.innerHeight;
+    let x = 0;
+    let y = 0;
+
+    if (side === 'left') {
+      x = 0;
+    } else if (side === 'right') {
+      x = window.innerWidth / 2;
+    } else if (side === 'top-left') {
+      height = window.innerHeight / 2;
+      x = 0;
+      y = 0;
+    } else if (side === 'top-right') {
+      height = window.innerHeight / 2;
+      x = window.innerWidth / 2;
+      y = 0;
+    } else if (side === 'bottom-left') {
+      height = window.innerHeight / 2;
+      x = 0;
+      y = window.innerHeight / 2;
+    } else if (side === 'bottom-right') {
+      height = window.innerHeight / 2;
+      x = window.innerWidth / 2;
+      y = window.innerHeight / 2;
+    }
 
     updateWindow(windowInstance.id, {
       isSnapped: true,
       isMaximized: false,
       isMinimized: false,
       size: { width, height },
-      position: { x, y: 0 }
+      position: { x, y }
     });
   }, [updateWindow, windowInstance.id]);
 
@@ -151,6 +174,9 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
           onClose={handleClose}
           title={windowInstance.title}
           icon={windowInstance.icon}
+          canClose={windowInstance.canClose}
+          canMinimize={windowInstance.canMinimize}
+          canMaximize={windowInstance.canMaximize}
         />
 
         <div

@@ -48,8 +48,8 @@ export type WindowInstance = Omit<WindowDefinition, 'initialSize' | 'initialPosi
  */
 export type WindowSystemProvider = {
   windows: WindowInstance[];
-  snapPreview: { side: 'left' | 'right' } | null;
-  setSnapPreview: (preview: { side: 'left' | 'right' } | null) => void;
+  snapPreview: { side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' } | null;
+  setSnapPreview: (preview: { side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' } | null) => void;
   openWindow: (window: WindowDefinition) => void;
   closeWindow: (id: string) => void;
   focusWindow: (id: string) => void;
@@ -64,6 +64,9 @@ export type WindowHeaderProps = {
   onClose: () => void;
   title: string;
   icon?: React.ReactNode;
+  canMinimize?: boolean;
+  canMaximize?: boolean;
+  canClose?: boolean;
 }
 
 export type WindowContextState = {

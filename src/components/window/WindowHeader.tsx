@@ -8,8 +8,10 @@ import styles from '../../styles/Window.module.css'
 import brandStyles from '../../styles/WindowBrand.module.css'
 import controlStyles from '../../styles/WindowControls.module.css'
 import { WindowHeaderProps } from "../../types";
+import useIsMobile from "../../hooks/useIsMobile";
+import { MOBILE_BREAKPOINT } from "../../store/constants";
 
-export default function WindowHeader({ onClose, title, icon }: WindowHeaderProps) {
+export default function WindowHeader({ onClose, title, icon, canMinimize, canMaximize, canClose }: WindowHeaderProps) {
   const {
     drag,
     isMaximized,
@@ -18,6 +20,8 @@ export default function WindowHeader({ onClose, title, icon }: WindowHeaderProps
     maximize,
     restore
   } = useWindowUI()
+
+  const isMobile = useIsMobile(MOBILE_BREAKPOINT)
 
   return (
     <div
@@ -32,9 +36,9 @@ export default function WindowHeader({ onClose, title, icon }: WindowHeaderProps
       </span>
 
       <div className={`window-controls ${controlStyles.controls}`}>
-        <MinimizeButton onClick={minimize} isMinimized={isMinimized} />
-        <MaximizeButton onClick={isMaximized ? restore : maximize} isMaximized={isMaximized} />
-        <CloseButton onClose={onClose} />
+        <MinimizeButton onClick={minimize} isMinimized={isMinimized} disabled={canMinimize === false} />
+        <MaximizeButton onClick={isMaximized ? restore : maximize} isMaximized={isMaximized} disabled={canMaximize === false || isMobile} />
+        <CloseButton onClose={onClose} disabled={canClose === false} />
       </div>
     </div>
   )

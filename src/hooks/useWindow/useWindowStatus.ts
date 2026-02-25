@@ -33,11 +33,8 @@ export function useWindowStatus({
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
 
-  useEffect(() => setSize(initialSize), [initialSize]);
-  useEffect(() => setPosition(initialPosition), [initialPosition]);
-
-  const lastSize = useRef(size);
-  const lastPosition = useRef(position);
+  const lastSize = useRef(initialSize);
+  const lastPosition = useRef(initialPosition);
   const windowRef = useRef<HTMLDivElement>(null);
 
   const updateLastPosition = useCallback((pos: Position) => {
@@ -47,6 +44,16 @@ export function useWindowStatus({
   const updateLastSize = useCallback((s: Size) => {
     lastSize.current = s;
   }, []);
+
+  useEffect(() => {
+    setSize(initialSize);
+    updateLastSize(initialSize);
+  }, [initialSize, updateLastSize]);
+
+  useEffect(() => {
+    setPosition(initialPosition);
+    updateLastPosition(initialPosition);
+  }, [initialPosition, updateLastPosition]);
 
   const snap = useSnap(setSnapPreview);
   const drag = useDrag(size, position, windowRef, updateLastPosition, snap.detectSnap);
@@ -63,6 +70,8 @@ export function useWindowStatus({
   }, [resize]);
 
   useEffect(() => {
+    if (!isDragging && !isResizing) return;
+
     const move = (e: MouseEvent) => {
       drag.dragTo(e);
       resize.resizeTo(e);
@@ -70,11 +79,15 @@ export function useWindowStatus({
 
     const end = () => {
       if (drag.isDragging.current) {
+        const hasMoved = lastPosition.current.x !== position.x || lastPosition.current.y !== position.y;
+
+        setPosition(lastPosition.current);
+
         if (snap.currentSide.current && onSnap) {
           onSnap(snap.currentSide.current);
           snap.resetSnap();
-        } else {
-          setPosition(lastPosition.current);
+        } else if (hasMoved) {
+          if (isSnapped) onUnsnap?.();
           onPositionChange?.(lastPosition.current);
         }
         drag.stopDrag();
@@ -96,7 +109,7 @@ export function useWindowStatus({
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseup', end);
     };
-  }, [drag, resize, onSnap, onUnsnap, isSnapped, snap, onPositionChange, onSizeChange]);
+  }, [drag, resize, onSnap, onUnsnap, isSnapped, snap, onPositionChange, onSizeChange, isDragging, isResizing]);
 
   return useMemo(() => ({
     size,
