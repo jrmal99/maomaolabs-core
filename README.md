@@ -1,60 +1,64 @@
 <div align="center">
+
+  <img src="./docs/assets/0.gif" alt="@maomaolabs/core — Desktop Window Management for the Web" width="100%" style="border-radius: 12px;" />
+
   <h1>@maomaolabs/core</h1>
 
-  <p>
-    <strong>A standalone lightweight React library that brings a complete, performant, and responsive desktop window management experience to the web.</strong>
-  </p>
-
-  <p align="center">
-    <img src="./docs/assets/0.gif" alt="MaoMao OS Desktop Experience" width="100%" style="border-radius: 8px;" />
-  </p>
+  <p><strong>A standalone, lightweight React library that brings a complete desktop window management experience to the web.</strong><br/>Drag, resize, snap, minimize, maximize — all performant and mobile-ready out of the box.</p>
 
   <p>
     <a href="https://www.npmjs.com/package/@maomaolabs/core"><img src="https://img.shields.io/npm/v/@maomaolabs/core?style=for-the-badge&color=000000" alt="NPM Version" /></a>
-    <a href="https://github.com/maomaolabs/core/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@maomaolabs/core?style=for-the-badge&color=000000" alt="License" /></a>
+    <a href="https://github.com/maomaolabs/core/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@maomaolabs/core?style=for-the-badge&color=000" alt="License" /></a>
     <img src="https://img.shields.io/badge/React-18.0.0+-blue?style=for-the-badge&logo=react&color=000000" alt="React 18+" />
   </p>
+
 </div>
 
-<br />
+---
 
-## ✨ Key Features
+## ✨ Features
 
-**Uncompromised performance**  
-Zero unnecessary re-renders thanks to context splitting (`useWindows` vs `useWindowActions`).
-<p align="center">
-  <img src="./docs/assets/1.png" alt="Performance architecture diagram" width="100%" style="border-radius: 8px;" />
-</p>
+<table>
+  <tr>
+    <td width="50%">
+      <h3>⚡ Zero unnecessary re-renders</h3>
+      Context is split into <code>useWindows</code> (state) and <code>useWindowActions</code> (actions). Components that only dispatch actions never re-render on state changes.
+      <br/><br/>
+      <img src="./docs/assets/1.png" alt="Performance architecture" width="100%" style="border-radius: 8px;" />
+    </td>
+    <td width="50%">
+      <h3>🪟 Complete window lifecycle</h3>
+      Open, close, minimize, maximize, drag and resize windows with native-feeling interactions on both desktop and mobile.
+      <br/><br/>
+      <img src="./docs/assets/4.gif" alt="Window lifecycle" width="100%" style="border-radius: 8px;" />
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>🧲 Built-in snapping</h3>
+      Half-screen (edge) and quarter-screen (corner) snapping with real-time preview overlays, just like a native OS.
+      <br/><br/>
+      <img src="./docs/assets/5.gif" alt="Window snapping" width="100%" style="border-radius: 8px;" />
+    </td>
+    <td width="50%" valign="top">
+      <h3>🧰 Out-of-the-box Toolbar</h3>
+      A fully customizable taskbar that handles individual app launchers, folder groupings, and minimized window management.
+      <br/><br/>
+      <img src="./docs/assets/7.png" alt="Toolbar" width="100%" style="border-radius: 8px;" />
+    </td>
+  </tr>
+</table>
 
-**Complete window lifecycle**  
-Seamlessly open, close, minimize, maximize, resize, and drag windows.
-<p align="center">
-  <img src="./docs/assets/4.gif" alt="Window lifecycle demonstration" width="100%" style="border-radius: 8px;" />
-</p>
-
-**Built-in snapping**  
-Native-feeling edge snapping (half screen) and corner snapping (quarter screen) functionality.
-<p align="center">
-  <img src="./docs/assets/5.gif" alt="Window snapping demonstration" width="100%" style="border-radius: 8px;" />
-</p>
-
-**Responsive design**  
-Automatically adapts interactions for mobile and desktop environments.
-<p align="center">
-  <img src="./docs/assets/6.png" alt="Responsive design showcase" width="300" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
-</p>
-
-**Out-of-the-box Toolbar**  
-A highly customizable taskbar handling both individual apps and folder groupings.
-<p align="center">
-  <img src="./docs/assets/7.png" alt="Toolbar demonstration" width="100%" style="border-radius: 8px;" />
-</p>
+<div align="center">
+  <h3>📱 Responsive by default</h3>
+  Interactions automatically adapt between mouse and touch environments. No configuration needed.
+  <br/><br/>
+  <img src="./docs/assets/6.png" alt="Responsive design" width="320" style="border-radius: 8px;" />
+</div>
 
 ---
 
 ## 📦 Installation
-
-Install via your preferred package manager (requires `react` and `react-dom` >= 18.0.0):
 
 ```bash
 npm install @maomaolabs/core
@@ -64,24 +68,24 @@ yarn add @maomaolabs/core
 pnpm add @maomaolabs/core
 ```
 
+> Requires `react` and `react-dom` >= 18.0.0 as peer dependencies.
+
 ---
 
 ## 🚀 Quick Start
 
-Get a window running in under 30 seconds:
-
 ```tsx
 import { WindowSystemProvider, WindowManager, useWindowActions } from '@maomaolabs/core';
-import '@maomaolabs/core/dist/style.css'; // Critical for native feeling interactions
+import '@maomaolabs/core/dist/style.css';
 
 const AppLauncher = () => {
   const { openWindow } = useWindowActions();
 
   return (
-    <button onClick={() => openWindow({ 
-      id: 'hello', 
-      title: 'Hello', 
-      component: <div>World!</div> 
+    <button onClick={() => openWindow({
+      id: 'hello',
+      title: 'Hello World',
+      component: <div>Hello from a managed window!</div>
     })}>
       Launch App
     </button>
@@ -98,26 +102,26 @@ export default function App() {
 }
 ```
 
+> ⚠️ Don't forget the CSS import — it's required for drag, resize, and snap overlays to work correctly.
+
 ---
 
-## 📖 Detailed Usage Guide
+## 📖 Usage Guide
 
-### Integrating the Toolbar
+### With Toolbar
 
-For a full desktop experience, include the `Toolbar` component to manage minimized windows and app launchers, including folder support.
+The `Toolbar` component provides a ready-made taskbar with app launchers, folder support, and minimized window restoration.
 
-<p align="center">
-  <img src="./docs/assets/2.png" alt="Toolbar integration overview" width="100%" style="border-radius: 8px;" />
-</p>
+<img src="./docs/assets/2.png" alt="Toolbar integration" width="100%" style="border-radius: 8px;" />
 
 ```tsx
 import { WindowSystemProvider, WindowManager, Toolbar } from '@maomaolabs/core';
 
 const DESKTOP_ITEMS = [
   {
-    id: 'browser-app',
+    id: 'browser',
     title: 'Browser',
-    component: <div />, // Your app component
+    component: <div />,
     initialSize: { width: 800, height: 600 }
   },
   {
@@ -141,18 +145,18 @@ export default function Desktop() {
 
 ### Accessing Window State
 
-If you need to render UI based on currently open windows (e.g., a custom taskbar), use the `useWindows` hook. **Warning**: This triggers a re-render on any window state change (drag, resize, etc).
+Use `useWindows` when you need to render UI based on open windows (e.g., a custom taskbar or badge counter).
 
-<p align="center">
-  <img src="./docs/assets/3.png" alt="Window state management diagram" width="100%" style="border-radius: 8px;" />
-</p>
+<img src="./docs/assets/3.png" alt="Window state access" width="100%" style="border-radius: 8px;" />
+
+> ⚠️ **Warning:** `useWindows` triggers a re-render on **every** window state change (drag, resize, focus). Only use it where necessary.
 
 ```tsx
 import { useWindows } from '@maomaolabs/core';
 
 const OpenAppCounter = () => {
   const windows = useWindows();
-  return <div>Active apps: {windows.length}</div>;
+  return <div>Active windows: {windows.length}</div>;
 };
 ```
 
@@ -160,80 +164,89 @@ const OpenAppCounter = () => {
 
 ## 📚 API Reference
 
-### Core Components
+### Components
 
 | Component | Description | Props |
 | :--- | :--- | :--- |
-| `WindowSystemProvider` | Context provider required for the window system. Wrap your app with this. | `children: ReactNode` |
-| `WindowManager` | Renders active windows and snap overlays. Must be inside the provider. | *None* |
-| `Toolbar` | Renders the taskbar with app launchers and manages minimized windows. | `toolbarItems: ToolbarItem[]`, `showLogo?: boolean` |
+| `WindowSystemProvider` | Root context provider. Wrap your entire app with this. | `children: ReactNode` |
+| `WindowManager` | Renders all active windows and snap preview overlays. | — |
+| `Toolbar` | Taskbar with app launchers and folder support. | `toolbarItems: ToolbarItem[]`, `showLogo?: boolean` |
 
-### Core Hooks
+### Hooks
 
-**`useWindowActions()`**  
-Returns an object with methods to manipulate windows without subscribing to window state changes.
-- `openWindow(window: WindowDefinition): void` - Opens a new window or focuses it if already open.
-- `closeWindow(id: string): void` - Destroys a window instance.
-- `focusWindow(id: string): void` - Brings a window to the top of the z-index stack.
-- `updateWindow(id: string, data: Partial<WindowInstance>): void` - Patches an existing window's state.
+#### `useWindowActions()`
+Returns window manipulation methods. **Does not subscribe to window state** — safe to call anywhere without performance concerns.
 
-**`useWindows()`**  
-- Returns: `WindowInstance[]` - The list of all currently active window instances.
-
-**`useWindowSnap()`**  
-- Returns: `{ snapPreview: { side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' } | null, setSnapPreview: Function }`
-
-### Interfaces
-
-**`WindowDefinition`** *(Used for opening windows)*
-
-| Property | Type | Description |
+| Method | Signature | Description |
 | :--- | :--- | :--- |
-| `id` | `string` | **Required.** Unique identifier for the window instance. |
-| `title` | `string` | **Required.** Text displayed in the window header. |
-| `component` | `React.ReactNode` | **Required.** The view to be rendered inside the window. |
-| `icon` | `React.ReactNode` | Optional element (e.g., SVG/image) for headers/toolbars. |
-| `initialSize` | `{ width: number; height: number }` | Optional starting dimensions. |
-| `initialPosition` | `{ x: number; y: number }` | Optional starting coordinates. |
-| `layer` | `'base' \| 'normal' \| 'alwaysOnTop' \| 'modal'` | Window render priority layer. |
-| `isMaximized` | `boolean` | If true, spawns the window spanning the screen. |
-| `canMinimize` | `boolean` | Allows the user to hide the window. |
-| `canMaximize` | `boolean` | Allows the user to toggle screen-spanning. |
-| `canClose` | `boolean` | Allows the user to destroy the window. |
+| `openWindow` | `(window: WindowDefinition) => void` | Opens a new window, or focuses it if already open. |
+| `closeWindow` | `(id: string) => void` | Destroys a window instance. |
+| `focusWindow` | `(id: string) => void` | Brings a window to the top of the z-index stack. |
+| `updateWindow` | `(id: string, data: Partial<WindowInstance>) => void` | Patches an existing window's state. |
 
-**`FolderDefinition`** *(Used within Toolbars to group apps)*
+#### `useWindows()`
+Returns `WindowInstance[]` — the list of all currently active windows. Re-renders on every state change.
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `id` | `string` | **Required.** Unique identifier for the folder. |
-| `title` | `string` | **Required.** Folder name. |
-| `apps` | `WindowDefinition[]` | **Required.** Array of windows contained within. |
-| `icon` | `React.ReactNode` | Optional visual descriptor. |
-
-> **Note:** `ToolbarItem` is a union type of `WindowDefinition | FolderDefinition`.
+#### `useWindowSnap()`
+Returns `{ snapPreview, setSnapPreview }` for reading and controlling the active snap preview overlay.
 
 ---
 
-## ⚙️ Configuration
+### Interfaces
 
-This library does not use environment variables. Styling behavior is primarily managed via the required CSS import:
+#### `WindowDefinition`
+
+| Property | Type | Required | Description |
+| :--- | :--- | :---: | :--- |
+| `id` | `string` | ✅ | Unique identifier for the window. |
+| `title` | `string` | ✅ | Text shown in the window title bar. |
+| `component` | `ReactNode` | ✅ | Content rendered inside the window. |
+| `icon` | `ReactNode` | — | Icon shown in the title bar and toolbar. |
+| `initialSize` | `{ width: number; height: number }` | — | Starting dimensions in pixels. |
+| `initialPosition` | `{ x: number; y: number }` | — | Starting coordinates in pixels. |
+| `layer` | `'base' \| 'normal' \| 'alwaysOnTop' \| 'modal'` | — | Z-index render layer. |
+| `isMaximized` | `boolean` | — | Spawns the window in maximized state. |
+| `canMinimize` | `boolean` | — | Shows the minimize control. |
+| `canMaximize` | `boolean` | — | Shows the maximize/restore control. |
+| `canClose` | `boolean` | — | Shows the close control. |
+
+#### `FolderDefinition`
+
+| Property | Type | Required | Description |
+| :--- | :--- | :---: | :--- |
+| `id` | `string` | ✅ | Unique identifier for the folder. |
+| `title` | `string` | ✅ | Folder display name. |
+| `apps` | `WindowDefinition[]` | ✅ | Windows grouped inside this folder. |
+| `icon` | `ReactNode` | — | Optional visual icon. |
+
+> `ToolbarItem = WindowDefinition | FolderDefinition`
+
+---
+
+## ⚙️ Styling
+
+The library requires a single CSS import to function correctly:
 
 ```tsx
 import '@maomaolabs/core/dist/style.css';
 ```
-Ensure your Vite/Webpack setup is configured to import and bundle CSS from `node_modules`.
+
+Ensure your bundler (Vite, Webpack, etc.) is configured to process CSS from `node_modules`.
 
 ---
 
-## 🤝 Contribution
+## 🤝 Contributing
 
-We welcome PRs. To run locally:
-1. `npm install`
-2. `npm run dev` to watch changes and test locally.
-3. `npm run test` before committing to ensure Vitest suites pass.
+```bash
+npm install       # Install dependencies
+npm run dev       # Start dev server with hot reload
+npm run test      # Run test suite (Vitest)
+```
+
+PRs are welcome. Please ensure all tests pass before submitting.
 
 ---
 
 ## 📝 License
 
-MIT License. See `LICENSE` for more information.
+MIT © [MaoMao Labs](https://github.com/maomaolabs)
