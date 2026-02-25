@@ -5,9 +5,14 @@
   "publishConfig": {
     "access": "public"
   },
+  "description": "A standalone lightweight React library that brings a complete, performant, and responsive desktop window management experience to the web.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/maomaolabs/core.git"
+  },
+  "homepage": "https://github.com/maomaolabs/core#readme",
+  "bugs": {
+    "url": "https://github.com/maomaolabs/core/issues"
   },
   "author": "MaoMao Labs",
   "license": "MIT",
@@ -56,6 +61,7 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@vitejs/plugin-react": "^4.0.0",
+    "gifsicle": "^7.0.1",
     "husky": "^9.1.7",
     "jsdom": "^28.0.0",
     "lint-staged": "^16.2.7",
