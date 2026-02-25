@@ -47,7 +47,8 @@
     "watch": "vite build --watch",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "prepublishOnly": "npm run lint && npm run test && npm run build"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
