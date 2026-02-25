@@ -25,13 +25,13 @@ Zero unnecessary re-renders thanks to context splitting (`useWindows` vs `useWin
 **Complete window lifecycle**  
 Seamlessly open, close, minimize, maximize, resize, and drag windows.
 <p align="center">
-  <video src="https://raw.githubusercontent.com/maomaolabs/core/main/docs/assets/4.webm" autoplay loop muted playsinline width="100%" style="border-radius: 8px;" aria-label="Window lifecycle demonstration"></video>
+  https://github.com/maomaolabs/core/blob/main/docs/assets/4.webm?raw=true
 </p>
 
 **Built-in snapping**  
 Native-feeling edge snapping (half screen) and corner snapping (quarter screen) functionality.
 <p align="center">
-  <video src="https://raw.githubusercontent.com/maomaolabs/core/main/docs/assets/5.webm" autoplay loop muted playsinline width="100%" style="border-radius: 8px;" aria-label="Window snapping demonstration"></video>
+  https://github.com/maomaolabs/core/blob/main/docs/assets/5.webm?raw=true
 </p>
 
 **Responsive design**  
