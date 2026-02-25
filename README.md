@@ -5,6 +5,10 @@
     <strong>A standalone lightweight React library that brings a complete, performant, and responsive desktop window management experience to the web.</strong>
   </p>
 
+  <p align="center">
+    <img src="./docs/assets/0.gif" alt="MaoMao OS Desktop Experience" width="100%" style="border-radius: 8px;" />
+  </p>
+
   <p>
     <a href="https://www.npmjs.com/package/@maomaolabs/core"><img src="https://img.shields.io/npm/v/@maomaolabs/core?style=for-the-badge&color=000000" alt="NPM Version" /></a>
     <a href="https://github.com/maomaolabs/core/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@maomaolabs/core?style=for-the-badge&color=000000" alt="License" /></a>
