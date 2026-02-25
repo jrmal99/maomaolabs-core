@@ -14,52 +14,62 @@ interface WindowState {
   updateWindow: (id: string, data: Partial<WindowInstance>) => void;
 }
 
-const isWindowMaximized = (isMobile: boolean, isMaximizedByDefault: boolean) =>
-  isMobile || isMaximizedByDefault;
+const getIsMobile = () => typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT;
 
-export const useWindowStore = createStore<WindowState>((set, get) => ({
+const bringToFront = (windows: WindowInstance[], id: string): WindowInstance[] => {
+  const targetWindow = windows.find(w => w.id === id);
+  if (!targetWindow) return windows;
+
+  const sortedByZ = [...windows].sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
+  const others = sortedByZ.filter(w => w.id !== id);
+
+  const newZOrder = [...others, targetWindow];
+  const zIndexMap = new Map(newZOrder.map((w, index) => [w.id, index + 1]));
+
+  return windows.map(w => ({
+    ...w,
+    zIndex: zIndexMap.get(w.id)!
+  }));
+};
+
+export const useWindowStore = createStore<WindowState>((set) => ({
   windows: [],
   snapPreview: null,
 
   setSnapPreview: (preview) => set({ snapPreview: preview }),
 
   openWindow: (windowDef: WindowDefinition) => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth <= MOBILE_BREAKPOINT;
-
     set((state) => {
       const prev = state.windows;
-      if (prev.some(w => w.id === windowDef.id)) {
-        const sorted = [...prev].sort((a, b) => a.zIndex - b.zIndex);
-        const others = sorted.filter(w => w.id !== windowDef.id);
-        const target = prev.find(w => w.id === windowDef.id)!;
+      const existingWindow = prev.find(w => w.id === windowDef.id);
 
-        const reordered = [...others, target];
-
+      if (existingWindow) {
+        const updatedWindows = bringToFront(prev, windowDef.id);
         return {
-          windows: reordered.map((w, index) => ({
-            ...w,
-            zIndex: index + 1,
-            isMinimized: w.id === windowDef.id ? false : w.isMinimized
-          }))
+          windows: updatedWindows.map(w =>
+            w.id === windowDef.id ? { ...w, isMinimized: false } : w
+          )
         };
       }
 
-      const sorted = [...prev].sort((a, b) => a.zIndex - b.zIndex);
-      const inputAsInstance = windowDef as Partial<WindowInstance>;
+      const isMobile = getIsMobile();
       const { initialSize, initialPosition, ...restWindowDef } = windowDef;
+
+      const payload = windowDef as Partial<WindowInstance>;
+
+      const maxZIndex = prev.length > 0 ? Math.max(...prev.map(w => w.zIndex || 0)) : 0;
 
       const newWindow: WindowInstance = {
         ...restWindowDef,
-        zIndex: prev.length + 1,
+        zIndex: maxZIndex + 1,
         isMinimized: false,
-        isMaximized: isWindowMaximized(isMobile, windowDef.isMaximized || false),
-        isSnapped: inputAsInstance.isSnapped,
-        size: inputAsInstance.size || initialSize || { width: 400, height: 300 },
-        position: inputAsInstance.position || initialPosition || { x: 50, y: 50 },
+        isMaximized: isMobile || Boolean(windowDef.isMaximized),
+        isSnapped: Boolean(payload.isSnapped),
+        size: payload.size || initialSize || { width: 400, height: 300 },
+        position: payload.position || initialPosition || { x: 50, y: 50 },
       };
 
-      const all = [...sorted, newWindow];
-      return { windows: all.map((w, index) => ({ ...w, zIndex: index + 1 })) };
+      return { windows: [...prev, newWindow] };
     });
   },
 
@@ -71,20 +81,14 @@ export const useWindowStore = createStore<WindowState>((set, get) => ({
 
   focusWindow: (id: string) => {
     set((state) => {
-      const prev = state.windows;
-      const windowToFocus = prev.find(w => w.id === id);
-      if (!windowToFocus) return { windows: prev }; // no state change
+      const exists = state.windows.some(w => w.id === id);
+      if (!exists) return state;
 
-      const sorted = [...prev].sort((a, b) => a.zIndex - b.zIndex);
-      const others = sorted.filter(w => w.id !== id);
-      const reordered = [...others, windowToFocus];
-
+      const updatedWindows = bringToFront(state.windows, id);
       return {
-        windows: reordered.map((w, index) => ({
-          ...w,
-          zIndex: index + 1,
-          isMinimized: w.id === id ? false : w.isMinimized
-        }))
+        windows: updatedWindows.map(w =>
+          w.id === id ? { ...w, isMinimized: false } : w
+        )
       };
     });
   },
