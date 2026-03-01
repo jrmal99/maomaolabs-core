@@ -1,24 +1,46 @@
 
 import React from 'react';
+import { SystemStyle } from '../store/WindowSystemProvider';
 
 /**
  * WindowDefinition type.
  * Defines the properties of a window.
  */
 
-export type WindowDefinition = {
-  id: string;
+export type WindowPresentation = {
   title: string;
   icon?: React.ReactNode;
   component: React.ReactNode;
+};
+
+/**
+ * WindowStyling type.
+ * Allows consumers to inject custom className and style into the window container.
+ * Kept separate from WindowPresentation to avoid collisions with HTML attribute names (e.g. `title`).
+ */
+export type WindowStyling = {
+  className?: string;
+  style?: React.CSSProperties;
+};
+
+export type WindowGeometry = {
   initialSize?: { width: number; height: number };
   initialPosition?: { x: number; y: number };
-  layer?: 'base' | 'normal' | 'alwaysOnTop' | 'modal';
-  isMaximized?: boolean;
+};
+
+export type WindowBehavior = {
   canMinimize?: boolean;
   canMaximize?: boolean;
   canClose?: boolean;
-}
+};
+
+export type WindowCore = {
+  id: string;
+  layer?: 'base' | 'normal' | 'alwaysOnTop' | 'modal';
+  isMaximized?: boolean;
+};
+
+export type WindowDefinition = WindowCore & WindowPresentation & WindowGeometry & WindowBehavior & WindowStyling;
 
 export type FolderDefinition = {
   id: string;
@@ -54,6 +76,7 @@ export type WindowSystemProvider = {
   closeWindow: (id: string) => void;
   focusWindow: (id: string) => void;
   updateWindow: (id: string, data: Partial<WindowInstance>) => void;
+  systemStyle?: SystemStyle;
 };
 
 export type WindowProps = {

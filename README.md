@@ -168,7 +168,7 @@ const OpenAppCounter = () => {
 
 | Component | Description | Props |
 | :--- | :--- | :--- |
-| `WindowSystemProvider` | Root context provider. Wrap your entire app with this. | `children: ReactNode` |
+| `WindowSystemProvider` | Root context provider. Wrap your entire app with this. | `children: ReactNode`, `systemStyle?: SystemStyle` |
 | `WindowManager` | Renders all active windows and snap preview overlays. | — |
 | `Toolbar` | Taskbar with app launchers and folder support. | `toolbarItems: ToolbarItem[]`, `showLogo?: boolean` |
 
@@ -209,6 +209,8 @@ Returns `{ snapPreview, setSnapPreview }` for reading and controlling the active
 | `canMinimize` | `boolean` | — | Shows the minimize control. |
 | `canMaximize` | `boolean` | — | Shows the maximize/restore control. |
 | `canClose` | `boolean` | — | Shows the close control. |
+| `className` | `string` | — | Inject custom CSS classes directly into the window container. |
+| `style` | `React.CSSProperties` | — | Inject inline styles overriding or extending window container styles. |
 
 #### `FolderDefinition`
 
@@ -221,6 +223,15 @@ Returns `{ snapPreview, setSnapPreview }` for reading and controlling the active
 
 > `ToolbarItem = WindowDefinition | FolderDefinition`
 
+#### `WindowStyling`
+
+Exported type available for reuse in your own components:
+
+```ts
+import type { WindowStyling } from '@maomaolabs/core';
+// { className?: string; style?: React.CSSProperties }
+```
+
 ---
 
 ## ⚙️ Styling
@@ -232,6 +243,94 @@ import '@maomaolabs/core/dist/style.css';
 ```
 
 Ensure your bundler (Vite, Webpack, etc.) is configured to process CSS from `node_modules`.
+
+### Theming System (`systemStyle`)
+
+The context provider accepts a `systemStyle` prop that governs the aesthetics of the entire rendered window manager system:
+
+```tsx
+<WindowSystemProvider systemStyle="aero">
+```
+
+Pre-bundled themes include:
+- `default`
+- `traffic` (colored dot buttons concept)
+- `linux` (modern dark/light gradient adaptation)
+- `yk2000` (classic 90s/00s retro styling)
+- `aero` (translucent glass blurring)
+
+**Note on Custom Themes**: `SystemStyle` strictly autocompletes the pre-built themes above, but mathematically permits *any* string to be passed via Type relaxation. You can pass your own `systemStyle="my-custom-theme"` alongside injected custom CSS.
+
+### Custom Theme Injection
+
+You can define your own theme by creating a CSS file that targets the `data-system-style` attribute.
+
+> ⚠️ Use standard CSS attribute selectors — **avoid `:global()`** unless your bundler explicitly supports it (e.g. CSS Modules with PostCSS).
+
+```css
+/* my-custom-theme.css */
+[data-system-style="my-custom-theme"] .window-header {
+  background: #1a1a2e;
+  color: #e0e0e0;
+}
+
+[data-system-style="my-custom-theme"] .window-controls {
+  gap: 6px;
+}
+```
+
+Import the CSS file anywhere in your app (e.g. `src/index.tsx`) before the provider renders:
+
+```tsx
+import './my-custom-theme.css';
+```
+
+Then pass the identifier to the provider:
+
+```tsx
+<WindowSystemProvider systemStyle="my-custom-theme">
+  {/* ... */}
+</WindowSystemProvider>
+```
+
+#### Available CSS selectors
+
+The following global class names are always present on the window DOM and safe to target in your theme:
+
+| Selector | Element |
+| :--- | :--- |
+| `.window-container` | Root window wrapper |
+| `.window-header` | Title bar (drag area) |
+| `.window-title` | Title text container |
+| `.window-icon` | Icon inside the title bar |
+| `.window-controls` | Button group (minimize / maximize / close) |
+| `.terminal-btn` | Generic control button |
+| `.window-scrollbar` | Scrollable content area |
+| `.window-resize-handle` | Bottom-right resize grip |
+
+You can also target individual buttons via the `data-action` attribute:
+
+```css
+[data-system-style="my-custom-theme"] [data-action="close"] { background: red; }
+[data-system-style="my-custom-theme"] [data-action="maximize"] { background: green; }
+[data-system-style="my-custom-theme"] [data-action="minimize"] { background: yellow; }
+```
+
+#### Per-window inline overrides
+
+Custom `className` and `style` props are accepted on each individual window definition via `openWindow()`, allowing per-instance overrides on top of the global theme:
+
+```tsx
+openWindow({
+  id: 'my-app',
+  title: 'My App',
+  component: <div />,
+  className: 'my-extra-class',
+  style: { borderRadius: '16px', border: '1px solid #444' },
+});
+```
+
+These are merged after the global theme styles, so they always take precedence.
 
 ---
 

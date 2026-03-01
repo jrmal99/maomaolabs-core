@@ -1,14 +1,16 @@
 'use client'
 
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo, useCallback, memo, FC, useEffect, useRef, useState } from 'react'
 import { WindowContext } from './WindowContext'
 import { useWindowActions, useWindowSnap } from '../../store/window-system-context'
+import { useSystemStyle } from '../../store/WindowSystemProvider'
 import { useWindowStatus } from '../../hooks/useWindow/useWindowStatus'
 import WindowHeader from './WindowHeader'
 
 import styles from '../../styles/Window.module.css'
 import { WindowProps, WindowContextState } from '../../types'
 import { ANIMATION_DURATION } from '../../store/constants'
+import getSnapMap from './snapMap'
 
 
 /**
@@ -18,16 +20,17 @@ import { ANIMATION_DURATION } from '../../store/constants'
  * @param {WindowProps} props - The window properties.
  * @returns {JSX.Element} The window component.
  */
-const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
+const Window: FC<WindowProps> = ({ window: windowInstance }) => {
   const { closeWindow, focusWindow, updateWindow } = useWindowActions()
   const { setSnapPreview } = useWindowSnap()
+  const systemStyle = useSystemStyle()
 
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [isClosing, setIsClosing] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
-  const timeoutRef = React.useRef<any>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let animationFrameId: number;
     animationFrameId = requestAnimationFrame(() => setIsOpen(true));
     return () => {
@@ -53,52 +56,30 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
     updateWindow(windowInstance.id, { isMinimized: false, isMaximized: false, isSnapped: false });
   }, [updateWindow, windowInstance.id]);
 
-  const handleSnap = React.useCallback((side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
-    let width = window.innerWidth / 2;
-    let height = window.innerHeight;
-    let x = 0;
-    let y = 0;
+  const handleSnap = useCallback(
+    (side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
+      const snapMap = getSnapMap();
+      const { width, height, x, y } = snapMap[side];
 
-    if (side === 'left') {
-      x = 0;
-    } else if (side === 'right') {
-      x = window.innerWidth / 2;
-    } else if (side === 'top-left') {
-      height = window.innerHeight / 2;
-      x = 0;
-      y = 0;
-    } else if (side === 'top-right') {
-      height = window.innerHeight / 2;
-      x = window.innerWidth / 2;
-      y = 0;
-    } else if (side === 'bottom-left') {
-      height = window.innerHeight / 2;
-      x = 0;
-      y = window.innerHeight / 2;
-    } else if (side === 'bottom-right') {
-      height = window.innerHeight / 2;
-      x = window.innerWidth / 2;
-      y = window.innerHeight / 2;
-    }
+      updateWindow(windowInstance.id, {
+        isSnapped: true,
+        isMaximized: false,
+        isMinimized: false,
+        size: { width, height },
+        position: { x, y },
+      });
+    },
+    [updateWindow, windowInstance.id]);
 
-    updateWindow(windowInstance.id, {
-      isSnapped: true,
-      isMaximized: false,
-      isMinimized: false,
-      size: { width, height },
-      position: { x, y }
-    });
-  }, [updateWindow, windowInstance.id]);
-
-  const handleUnsnap = React.useCallback(() => {
+  const handleUnsnap = useCallback(() => {
     updateWindow(windowInstance.id, { isSnapped: false });
   }, [updateWindow, windowInstance.id]);
 
-  const handlePositionChange = React.useCallback((pos: { x: number, y: number }) => {
+  const handlePositionChange = useCallback((pos: { x: number, y: number }) => {
     updateWindow(windowInstance.id, { position: pos });
   }, [updateWindow, windowInstance.id]);
 
-  const handleSizeChange = React.useCallback((sz: { width: number, height: number }) => {
+  const handleSizeChange = useCallback((sz: { width: number, height: number }) => {
     updateWindow(windowInstance.id, { size: sz });
   }, [updateWindow, windowInstance.id]);
 
@@ -153,12 +134,14 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
         aria-modal="false"
         tabIndex={-1}
         className={`window-container
-            ${styles.container}
-            ${!isDragging && !isResizing ? `${styles.transition} window-transition` : ''}
-            ${isVisible ? styles.visible : styles.hidden}
-            ${isMaximized ? styles.maximized : ''}
-            ${isMinimized ? styles.minimized : ''}
+        ${styles.container}
+        ${!isDragging && !isResizing ? `${styles.transition} window-transition` : ''}
+        ${isVisible ? styles.visible : styles.hidden}
+        ${isMaximized ? styles.maximized : ''}
+        ${isMinimized ? styles.minimized : ''}
+        ${windowInstance.className || ''}
         `}
+        data-system-style={systemStyle}
         style={{
           width: isMaximized ? undefined : size.width,
           height: isMinimized ? undefined : isMaximized ? undefined : size.height,
@@ -166,7 +149,8 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
           top: isMaximized ? undefined : position.y,
           zIndex: windowInstance.zIndex,
           display: 'flex',
-          pointerEvents: isMinimized ? 'none' : 'auto'
+          pointerEvents: isMinimized ? 'none' : 'auto',
+          ...windowInstance.style
         }}
         onMouseDown={() => focusWindow(windowInstance.id)}
       >
@@ -194,8 +178,8 @@ const Window: React.FC<WindowProps> = ({ window: windowInstance }) => {
         )}
 
       </div>
-    </WindowContext.Provider>
+    </WindowContext.Provider >
   )
 }
 
-export default React.memo(Window)
+export default memo(Window)

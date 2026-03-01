@@ -17,7 +17,7 @@
   transition: background 0.2s, color 0.2s;
 }
 
-.button:hover:not(:disabled) {
+[data-system-style="default"] .button:hover:not(:disabled) {
   background: rgba(0, 0, 0, 0.05);
   color: #18181b;
 }
@@ -27,9 +27,22 @@
   cursor: not-allowed;
 }
 
-.close:hover:not(:disabled) {
+[data-system-style="default"] .button.close:hover:not(:disabled) {
   background: #ef4444;
   color: white;
+}
+
+/* Prevent Tree Shaking of dynamic class names */
+.close {
+  display: flex;
+}
+
+.minimize {
+  display: flex;
+}
+
+.maximize {
+  display: flex;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,7 +50,7 @@
     color: #a1a1aa;
   }
 
-  .button:hover:not(:disabled) {
+  [data-system-style="default"] .button:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.1);
     color: #e4e4e7;
   }
