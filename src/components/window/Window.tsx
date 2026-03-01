@@ -124,8 +124,6 @@ const Window: FC<WindowProps> = ({ window: windowInstance }) => {
   const isMaximized = windowInstance.isMaximized;
   const isMinimized = windowInstance.isMinimized;
 
-  // Memoized to avoid creating a new object reference on every render (drag/resize
-  // fires ~60 times/sec — a new object would force unnecessary DOM style updates).
   const containerStyle = useMemo(() => ({
     width: isMaximized ? undefined : size.width,
     height: isMinimized ? undefined : isMaximized ? undefined : size.height,

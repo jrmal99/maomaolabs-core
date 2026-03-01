@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased] ✨
+## 1.1.0 ✨
 
 ### ✨ Added
 - **Theme Support (`systemStyle`)**: Window controls now support varied aesthetics adapting to `default`, `traffic` (colored dot buttons), `linux` (clean dark/light gradient), `yk2000` (classic 90s/00s retro) and **`aero` (translucent glass)** themes through CSS Modules.
