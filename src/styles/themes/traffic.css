@@ -1,0 +1,87 @@
+/* ------------------------------------- */
+/* Traffic Light Theme Styles    */
+/* ------------------------------------- */
+
+[data-system-style="traffic"] .window-header,
+[data-system-style="traffic"] .window-header {
+  flex-direction: row-reverse;
+}
+
+[data-system-style="traffic"] .window-controls {
+  gap: 8px;
+}
+
+[data-system-style="traffic"] button.terminal-btn {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent !important;
+  background-color: #e5e5e5;
+  transition: background-color 0.25s ease-out, opacity 0.25s ease-out, filter 0.25s ease-out;
+}
+
+[data-system-style="traffic"] button.terminal-btn:disabled {
+  background-color: #e5e5e5 !important;
+  opacity: 1;
+}
+
+[data-system-style="traffic"] button.terminal-btn svg {
+  width: 8px;
+  height: 8px;
+  stroke: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 0.25s ease-out;
+}
+
+[data-system-style="traffic"] div:hover button.terminal-btn:not(:disabled) svg {
+  opacity: 1;
+}
+
+[data-system-style="traffic"] button.terminal-btn[data-action="close"] {
+  order: 1;
+  background-color: #ff5f56;
+}
+
+[data-system-style="traffic"] button.terminal-btn[data-action="close"]:active:not(:disabled) {
+  background-color: #bf4740;
+}
+
+[data-system-style="traffic"] button.terminal-btn[data-action="minimize"] {
+  order: 2;
+  background-color: #ffbd2e;
+}
+
+[data-system-style="traffic"] button.terminal-btn[data-action="minimize"]:active:not(:disabled) {
+  background-color: #bf8e22;
+}
+
+[data-system-style="traffic"] button.terminal-btn[data-action="maximize"] {
+  order: 3;
+  background-color: #27c93f;
+}
+
+[data-system-style="traffic"] button.terminal-btn[data-action="maximize"]:active:not(:disabled) {
+  background-color: #1da031;
+}
+
+[data-system-style="traffic"] button.terminal-btn:hover:not(:disabled) {
+  filter: brightness(1.25) saturate(1.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-system-style="traffic"] button.terminal-btn:disabled {
+    background-color: #3f3f3f !important;
+  }
+
+  [data-system-style="traffic"] button.terminal-btn svg {
+    stroke: rgba(0, 0, 0, 0.7);
+  }
+
+  [data-system-style="traffic"] button.terminal-btn:hover:not(:disabled) {
+    filter: brightness(0.75) saturate(1.3);
+  }
+}

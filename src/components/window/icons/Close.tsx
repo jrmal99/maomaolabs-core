@@ -14,10 +14,11 @@ type Props = {
 export function CloseButton({ onClose, disabled }: Props) {
   return (
     <button
-      className={`terminal-btn close ${styles.button} ${styles.close}`}
+      className={`terminal-btn ${styles.button} ${styles.close}`}
       onClick={onClose}
       disabled={disabled}
       title="Close"
+      data-action="close"
     >
       <CloseIcon />
     </button>

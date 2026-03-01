@@ -125,7 +125,6 @@
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.15),
     0 0 0 1px rgba(0, 0, 0, 0.08);
-  /* Focused ring */
 }
 
 .maximized {
@@ -171,7 +170,6 @@
     border-color: #ffffff;
   }
 
-  /* Scrollbar - Reverting to neon/bright for dark mode contrast */
   .scrollbar::-webkit-scrollbar-thumb,
   .scrollbarX::-webkit-scrollbar-thumb,
   .content *::-webkit-scrollbar-thumb {
@@ -182,7 +180,6 @@
   .scrollbarX::-webkit-scrollbar-thumb:hover,
   .content *::-webkit-scrollbar-thumb:hover {
     background-color: #52525b;
-    /* Zinc 600 */
   }
 
   .scrollbarX {

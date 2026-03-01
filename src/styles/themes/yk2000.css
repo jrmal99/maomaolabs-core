@@ -1,0 +1,113 @@
+/* ------------------------------------- */
+/* YK2000 Theme Styles */
+/* ------------------------------------- */
+
+[data-system-style="yk2000"] {
+  border-radius: 0;
+  border: 1px solid #ffffff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  box-shadow: inset 1px 1px 0px 0px #ffffff,
+    inset -1px -1px 0px 0px #808080,
+    1px 1px 0px 0px #000000;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+}
+
+[data-system-style="yk2000"] .window-header,
+[data-system-style="yk2000"].focused .window-header {
+  background: linear-gradient(90deg, #0a246a 0%, #a6caf0 100%);
+  border-bottom: none;
+  color: white;
+  height: 28px;
+  padding: 0 4px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+[data-system-style="yk2000"].focused {
+  box-shadow: inset 1px 1px 0px 0px #ffffff,
+    inset -1px -1px 0px 0px #808080,
+    2px 2px 0px 0px #000000;
+}
+
+[data-system-style="yk2000"] .window-title,
+[data-system-style="yk2000"] .brand-text {
+  font-family: "Tahoma", "Segoe UI", sans-serif;
+  font-weight: bold;
+  font-size: 13px;
+  color: white;
+  text-shadow: none;
+}
+
+[data-system-style="yk2000"] .window-controls {
+  gap: 4px;
+}
+
+[data-system-style="yk2000"] button.terminal-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d4d0c8;
+  color: black;
+  border: 1px solid #ffffff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  box-shadow: inset -1px -1px 0px 0px #808080;
+  transition: none;
+}
+
+[data-system-style="yk2000"] button.terminal-btn:active:not(:disabled) {
+  border: 1px solid #404040;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  box-shadow: inset 1px 1px 0px 0px #000000;
+  background: #d4d0c8;
+  padding-top: 1px;
+  padding-left: 1px;
+}
+
+[data-system-style="yk2000"] button.terminal-btn:disabled {
+  color: #808080;
+  text-shadow: 1px 1px 0px #ffffff;
+  opacity: 1;
+  background:
+    repeating-linear-gradient(135deg,
+      transparent,
+      transparent 2px,
+      rgba(43, 43, 43, 0.6) 2px,
+      rgba(43, 43, 43, 0.6) 4px),
+    #d4d0c8;
+}
+
+[data-system-style="yk2000"] button.terminal-btn svg {
+  width: 10px;
+  height: 10px;
+  stroke: black;
+  stroke-width: 2px;
+}
+
+[data-system-style="yk2000"] button.terminal-btn[data-action="close"] {
+  order: 3;
+}
+
+[data-system-style="yk2000"] button.terminal-btn[data-action="minimize"] {
+  order: 1;
+}
+
+[data-system-style="yk2000"] button.terminal-btn[data-action="maximize"] {
+  order: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+
+  [data-system-style="yk2000"] .window-header,
+  [data-system-style="yk2000"].focused .window-header {
+    background: linear-gradient(90deg, #0a246a 0%, rgb(19, 19, 19) 100%);
+  }
+}

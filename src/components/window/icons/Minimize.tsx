@@ -15,10 +15,11 @@ export const MinimizeIcon = () => (
 export function MinimizeButton({ onClick, isMinimized, disabled }: Props) {
   return (
     <button
-      className={`terminal-btn ${styles.button}`}
+      className={`terminal-btn ${styles.button} ${styles.minimize}`}
       onClick={() => { onClick(); }}
       disabled={disabled || isMinimized}
       title={isMinimized ? "Restore" : "Minimize"}
+      data-action="minimize"
     >
       <MinimizeIcon />
     </button>

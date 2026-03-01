@@ -113,3 +113,6 @@ typings/
 
 # Vite dist
 dist
+
+# Vite config timestamp cache
+vite.config.ts.timestamp-*.mjs

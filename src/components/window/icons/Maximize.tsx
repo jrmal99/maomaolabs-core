@@ -22,10 +22,11 @@ const RestoreIcon = () => (
 export function MaximizeButton({ onClick, isMaximized, disabled }: Props) {
   return (
     <button
-      className={`terminal-btn ${styles.button}`}
+      className={`terminal-btn ${styles.button} ${styles.maximize}`}
       onClick={() => { onClick() }}
       disabled={disabled}
       title={isMaximized ? "Restore" : "Maximize"}
+      data-action="maximize"
     >
       {isMaximized ? <RestoreIcon /> : <MaximizeIcon />}
     </button>
