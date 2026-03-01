@@ -9,6 +9,7 @@
   <p>
     <a href="https://www.npmjs.com/package/@maomaolabs/core"><img src="https://img.shields.io/npm/v/@maomaolabs/core?style=for-the-badge&color=000000" alt="NPM Version" /></a>
     <a href="https://github.com/maomaolabs/core/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/@maomaolabs/core?style=for-the-badge&color=000" alt="License" /></a>
+    <a href="./CHANGELOG.md"><img src="https://img.shields.io/badge/Changelog-📖-000000?style=for-the-badge" alt="Changelog" /></a>
     <img src="https://img.shields.io/badge/React-18.0.0+-blue?style=for-the-badge&logo=react&color=000000" alt="React 18+" />
   </p>
 
