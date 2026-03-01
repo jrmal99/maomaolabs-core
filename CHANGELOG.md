@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ♻️ Changed
 - **`Window.tsx` Refactor**: Now consumes `useSystemStyle` context, reflecting its state into the actual DOM uniformly via the `data-system-style` attribute.
+- **`Window.tsx` Performance**: Extracted the `style` prop object into a `useMemo` (`containerStyle`), avoiding the creation of a new object reference on every render during drag/resize events (~60 renders/sec). Prevents unnecessary DOM style recalculations caused by referential inequality.
 - **Style Overhaul (`Window.module.css` / `WindowControls.module.css`)**: Removed generic conditional and polluted class-based logic. Migrated to purely reactive global attribute selectors (`:global([data-system-style="..."])`).
 - **Tree-Shaking Prevention**: Visual components (`Minimize.tsx`, `Maximize.tsx`, `Close.tsx`) have assigned direct CSS `.close`, `.minimize`, `.maximize` classes to ensure safelisting and avoid arbitrary code elimination during build processes.
 - **Improved Declarations**: Refactored React base imports within `Window.tsx` replacing inline object referencing with clean destructured hooks and explicit aliasing syntax.
+

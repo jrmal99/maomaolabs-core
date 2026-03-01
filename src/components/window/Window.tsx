@@ -124,6 +124,19 @@ const Window: FC<WindowProps> = ({ window: windowInstance }) => {
   const isMaximized = windowInstance.isMaximized;
   const isMinimized = windowInstance.isMinimized;
 
+  // Memoized to avoid creating a new object reference on every render (drag/resize
+  // fires ~60 times/sec — a new object would force unnecessary DOM style updates).
+  const containerStyle = useMemo(() => ({
+    width: isMaximized ? undefined : size.width,
+    height: isMinimized ? undefined : isMaximized ? undefined : size.height,
+    left: isMaximized ? undefined : position.x,
+    top: isMaximized ? undefined : position.y,
+    zIndex: windowInstance.zIndex,
+    display: 'flex' as const,
+    pointerEvents: (isMinimized ? 'none' : 'auto') as React.CSSProperties['pointerEvents'],
+    ...windowInstance.style,
+  }), [size, position, isMaximized, isMinimized, windowInstance.zIndex, windowInstance.style]);
+
   return (
     <WindowContext.Provider value={uiValue}>
       <div
@@ -142,16 +155,7 @@ const Window: FC<WindowProps> = ({ window: windowInstance }) => {
         ${windowInstance.className || ''}
         `}
         data-system-style={systemStyle}
-        style={{
-          width: isMaximized ? undefined : size.width,
-          height: isMinimized ? undefined : isMaximized ? undefined : size.height,
-          left: isMaximized ? undefined : position.x,
-          top: isMaximized ? undefined : position.y,
-          zIndex: windowInstance.zIndex,
-          display: 'flex',
-          pointerEvents: isMinimized ? 'none' : 'auto',
-          ...windowInstance.style
-        }}
+        style={containerStyle}
         onMouseDown={() => focusWindow(windowInstance.id)}
       >
         <WindowHeader
