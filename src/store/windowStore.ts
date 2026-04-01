@@ -1,8 +1,7 @@
 import { createStore } from './createStore';
 import { WindowInstance, WindowDefinition } from '../types';
 import { MOBILE_BREAKPOINT } from './constants';
-
-type SnapSide = 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+import type { SnapSide } from '../hooks/useWindow/types';
 
 interface WindowState {
   windows: WindowInstance[];

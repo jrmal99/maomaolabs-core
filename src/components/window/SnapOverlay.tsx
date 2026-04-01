@@ -2,17 +2,24 @@
 import styles from '../../styles/SnapOverlay.module.css';
 
 interface SnapOverlayProps {
-  side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | null;
+  side: 'top' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | null;
 }
 
 export default function SnapOverlay({ side }: SnapOverlayProps) {
   if (!side) return null;
   return (
     <>
+      {/* Top = maximize preview */}
       <div
         className={`
-            ${styles.overlay} 
-            ${styles.left} 
+            ${styles.overlayTop}
+            ${side === 'top' ? styles.visible : ''}
+        `}
+      />
+      <div
+        className={`
+            ${styles.overlay}
+            ${styles.left}
             ${side === 'left' ? styles.visible : ''}
         `}
       />

@@ -5,6 +5,7 @@ import { WindowContext } from './WindowContext';
 import { useWindowActions, useWindowSnap } from '../../store/window-system-context';
 import { useSystemStyle } from '../../store/WindowSystemProvider';
 import { useWindowStatus } from '../../hooks/useWindow/useWindowStatus';
+import type { ResizeEdge } from '../../hooks/useWindow/useResize';
 import WindowHeader from './WindowHeader';
 
 import styles from '../../styles/Window.module.css';
@@ -12,13 +13,19 @@ import { WindowProps, WindowContextState } from '../../types';
 import { ANIMATION_DURATION } from '../../store/constants';
 import getSnapMap from './snapMap';
 
-/**
- * Window component.
- * Renders a window with a header, content, and resize handle.
- *
- * @param {WindowProps} props - The window properties.
- * @returns {JSX.Element} The window component.
- */
+const RESIZE_HANDLES: { edge: ResizeEdge; style: React.CSSProperties }[] = [
+  // Edges
+  { edge: 'n', style: { top: 0, left: 6, right: 6, height: 6, cursor: 'n-resize' } },
+  { edge: 's', style: { bottom: 0, left: 6, right: 6, height: 6, cursor: 's-resize' } },
+  { edge: 'w', style: { left: 0, top: 6, bottom: 6, width: 6, cursor: 'w-resize' } },
+  { edge: 'e', style: { right: 0, top: 6, bottom: 6, width: 6, cursor: 'e-resize' } },
+  // Corners
+  { edge: 'nw', style: { top: 0, left: 0, width: 12, height: 12, cursor: 'nw-resize' } },
+  { edge: 'ne', style: { top: 0, right: 0, width: 12, height: 12, cursor: 'ne-resize' } },
+  { edge: 'sw', style: { bottom: 0, left: 0, width: 12, height: 12, cursor: 'sw-resize' } },
+  { edge: 'se', style: { bottom: 0, right: 0, width: 12, height: 12, cursor: 'se-resize' } },
+];
+
 const Window: FC<WindowProps> = ({ window: windowInstance }) => {
   const { closeWindow, focusWindow, updateWindow } = useWindowActions();
   const { setSnapPreview } = useWindowSnap();
@@ -50,32 +57,92 @@ const Window: FC<WindowProps> = ({ window: windowInstance }) => {
   }, [updateWindow, windowInstance.id]);
 
   const handleMaximize = useCallback(() => {
-    updateWindow(windowInstance.id, { isMaximized: true, isMinimized: false, isSnapped: false });
-  }, [updateWindow, windowInstance.id]);
+    // Remember pre-maximize size so dragging from header restores it
+    const preSnap =
+      !windowInstance.isSnapped && !windowInstance.isMaximized
+        ? { width: windowInstance.size.width, height: windowInstance.size.height }
+        : (windowInstance._preSnapSize ?? null);
+    updateWindow(windowInstance.id, {
+      isMaximized: true,
+      isMinimized: false,
+      isSnapped: false,
+      _preSnapSize: preSnap,
+    });
+  }, [
+    updateWindow,
+    windowInstance.id,
+    windowInstance.isSnapped,
+    windowInstance.isMaximized,
+    windowInstance.size,
+    windowInstance._preSnapSize,
+  ]);
 
   const handleRestore = useCallback(() => {
     updateWindow(windowInstance.id, { isMinimized: false, isMaximized: false, isSnapped: false });
   }, [updateWindow, windowInstance.id]);
 
   const handleSnap = useCallback(
-    (side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
+    (
+      side: 'top' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right',
+    ) => {
+      // Remember the pre-snap/pre-maximize size
+      const preSnap =
+        !windowInstance.isSnapped && !windowInstance.isMaximized
+          ? { width: windowInstance.size.width, height: windowInstance.size.height }
+          : (windowInstance._preSnapSize ?? null);
+
+      // Top snap = maximize
+      if (side === 'top') {
+        updateWindow(windowInstance.id, {
+          isMaximized: true,
+          isSnapped: false,
+          _snapSide: null,
+          _preSnapSize: preSnap,
+          isMinimized: false,
+        });
+        return;
+      }
+
       const snapMap = getSnapMap();
       const { width, height, x, y } = snapMap[side];
 
       updateWindow(windowInstance.id, {
         isSnapped: true,
+        _snapSide: side,
+        _preSnapSize: preSnap,
         isMaximized: false,
         isMinimized: false,
         size: { width, height },
         position: { x, y },
       });
     },
-    [updateWindow, windowInstance.id],
+    [
+      updateWindow,
+      windowInstance.id,
+      windowInstance.isSnapped,
+      windowInstance.isMaximized,
+      windowInstance.size,
+      windowInstance._preSnapSize,
+    ],
   );
 
-  const handleUnsnap = useCallback(() => {
-    updateWindow(windowInstance.id, { isSnapped: false });
-  }, [updateWindow, windowInstance.id]);
+  const handleUnsnap = useCallback(
+    (restoreSize: boolean, wasMaximized: boolean) => {
+      const update: Partial<typeof windowInstance> = {
+        isSnapped: false,
+        _snapSide: null,
+        _preSnapSize: null,
+      };
+      if (wasMaximized) {
+        update.isMaximized = false;
+      }
+      if (restoreSize && windowInstance._preSnapSize) {
+        update.size = windowInstance._preSnapSize;
+      }
+      updateWindow(windowInstance.id, update);
+    },
+    [updateWindow, windowInstance.id, windowInstance._preSnapSize],
+  );
 
   const handlePositionChange = useCallback(
     (pos: { x: number; y: number }) => {
@@ -97,6 +164,7 @@ const Window: FC<WindowProps> = ({ window: windowInstance }) => {
     isMinimized: windowInstance.isMinimized || false,
     isMaximized: windowInstance.isMaximized || false,
     isSnapped: windowInstance.isSnapped || false,
+    preSnapSize: windowInstance._preSnapSize ?? null,
     onSnap: handleSnap,
     onUnsnap: handleUnsnap,
     setSnapPreview,
@@ -111,7 +179,7 @@ const Window: FC<WindowProps> = ({ window: windowInstance }) => {
       isDragging,
       isResizing,
       drag,
-      resize,
+      resize: (e: React.MouseEvent) => resize(e),
       windowRef,
       isMinimized: windowInstance.isMinimized || false,
       isMaximized: windowInstance.isMaximized || false,
@@ -192,9 +260,15 @@ const Window: FC<WindowProps> = ({ window: windowInstance }) => {
           {windowInstance.component}
         </div>
 
-        {!isMaximized && (
-          <div className={`window-resize-handle ${styles.resizeHandle}`} onMouseDown={resize} />
-        )}
+        {!isMaximized &&
+          RESIZE_HANDLES.map(({ edge, style }) => (
+            <div
+              key={edge}
+              className='window-resize-handle'
+              style={{ position: 'absolute', zIndex: 60, ...style }}
+              onMouseDown={(e) => resize(e, edge)}
+            />
+          ))}
       </div>
     </WindowContext.Provider>
   );

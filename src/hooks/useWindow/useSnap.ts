@@ -2,6 +2,10 @@ import { useRef, useCallback, useMemo } from 'react';
 import { SNAP_THRESHOLD } from './constants';
 import { SnapSide } from './types';
 
+/**
+ * Hook for detecting window snap zones at viewport edges.
+ * Supports left, right, four corners, and top (maximize).
+ */
 export function useSnap(setSnapPreview?: (p: { side: SnapSide } | null) => void) {
   const currentSide = useRef<SnapSide | null>(null);
 
@@ -19,6 +23,9 @@ export function useSnap(setSnapPreview?: (p: { side: SnapSide } | null) => void)
         if (y < SNAP_THRESHOLD) next = 'top-right';
         else if (y > screenH - SNAP_THRESHOLD) next = 'bottom-right';
         else next = 'right';
+      } else if (y < SNAP_THRESHOLD) {
+        // Top edge (not in a corner) → maximize
+        next = 'top';
       }
 
       if (next !== currentSide.current) {

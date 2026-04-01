@@ -64,6 +64,18 @@ export type WindowInstance = Omit<WindowDefinition, 'initialSize' | 'initialPosi
   isMinimized?: boolean;
   isMaximized?: boolean;
   isSnapped?: boolean;
+  /** Which snap zone the window is in (for browser resize recalculation). */
+  _snapSide?:
+    | 'top'
+    | 'left'
+    | 'right'
+    | 'top-left'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-right'
+    | null;
+  /** Size before snapping (restored on unsnap). */
+  _preSnapSize?: { width: number; height: number } | null;
   zIndex: number;
 };
 
@@ -74,11 +86,11 @@ export type WindowInstance = Omit<WindowDefinition, 'initialSize' | 'initialPosi
 export type WindowSystemProvider = {
   windows: WindowInstance[];
   snapPreview: {
-    side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+    side: 'top' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   } | null;
   setSnapPreview: (
     preview: {
-      side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+      side: 'top' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
     } | null,
   ) => void;
   openWindow: (window: WindowDefinition) => void;

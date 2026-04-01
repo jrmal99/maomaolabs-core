@@ -1,6 +1,7 @@
 export default function getSnapMap() {
   if (typeof window === 'undefined') {
     return {
+      top: { width: 0, height: 0, x: 0, y: 0 },
       left: { width: 0, height: 0, x: 0, y: 0 },
       right: { width: 0, height: 0, x: 0, y: 0 },
       'top-left': { width: 0, height: 0, x: 0, y: 0 },
@@ -15,6 +16,12 @@ export default function getSnapMap() {
   const fullHeight = window.innerHeight;
 
   return {
+    top: {
+      width: window.innerWidth,
+      height: fullHeight,
+      x: 0,
+      y: 0,
+    },
     left: {
       width: halfWidth,
       height: fullHeight,
