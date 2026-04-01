@@ -7,7 +7,7 @@ describe('useWindowStatus', () => {
     isMinimized: false,
     isMaximized: false,
     initialSize: { width: 400, height: 300 },
-    initialPosition: { x: 100, y: 100 }
+    initialPosition: { x: 100, y: 100 },
   };
 
   beforeEach(() => {

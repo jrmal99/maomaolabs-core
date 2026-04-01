@@ -26,7 +26,7 @@ export function useWindowStatus({
   onUnsnap,
   setSnapPreview,
   onPositionChange,
-  onSizeChange
+  onSizeChange,
 }: WindowStatusProps) {
   const [size, setSize] = useState<Size>(initialSize);
   const [position, setPosition] = useState<Position>(initialPosition);
@@ -59,15 +59,21 @@ export function useWindowStatus({
   const drag = useDrag(size, position, windowRef, updateLastPosition, snap.detectSnap);
   const resize = useResize(size, windowRef, updateLastSize);
 
-  const startDrag = useCallback((e: React.MouseEvent) => {
-    setIsDragging(true);
-    drag.startDrag(e);
-  }, [drag]);
+  const startDrag = useCallback(
+    (e: React.MouseEvent) => {
+      setIsDragging(true);
+      drag.startDrag(e);
+    },
+    [drag],
+  );
 
-  const startResize = useCallback((e: React.MouseEvent) => {
-    setIsResizing(true);
-    resize.startResize(e);
-  }, [resize]);
+  const startResize = useCallback(
+    (e: React.MouseEvent) => {
+      setIsResizing(true);
+      resize.startResize(e);
+    },
+    [resize],
+  );
 
   useEffect(() => {
     if (!isDragging && !isResizing) return;
@@ -79,7 +85,8 @@ export function useWindowStatus({
 
     const end = () => {
       if (drag.isDragging.current) {
-        const hasMoved = lastPosition.current.x !== position.x || lastPosition.current.y !== position.y;
+        const hasMoved =
+          lastPosition.current.x !== position.x || lastPosition.current.y !== position.y;
 
         setPosition(lastPosition.current);
 
@@ -109,15 +116,29 @@ export function useWindowStatus({
       window.removeEventListener('mousemove', move);
       window.removeEventListener('mouseup', end);
     };
-  }, [drag, resize, onSnap, onUnsnap, isSnapped, snap, onPositionChange, onSizeChange, isDragging, isResizing]);
-
-  return useMemo(() => ({
-    size,
-    position,
-    windowRef,
-    drag: startDrag,
-    resize: startResize,
+  }, [
+    drag,
+    resize,
+    onSnap,
+    onUnsnap,
+    isSnapped,
+    snap,
+    onPositionChange,
+    onSizeChange,
     isDragging,
-    isResizing
-  }), [size, position, isDragging, isResizing, startDrag, startResize]);
+    isResizing,
+  ]);
+
+  return useMemo(
+    () => ({
+      size,
+      position,
+      windowRef,
+      drag: startDrag,
+      resize: startResize,
+      isDragging,
+      isResizing,
+    }),
+    [size, position, isDragging, isResizing, startDrag, startResize],
+  );
 }

@@ -4,40 +4,41 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import Window from '../Window';
 import { WindowInstance } from '../../../types';
 
-const { mockUseWindowActions, mockUseWindowSnap, mockUseWindowStatus, MockWindowHeader } = vi.hoisted(() => {
-  return {
-    mockUseWindowActions: {
-      closeWindow: vi.fn(),
-      focusWindow: vi.fn(),
-      updateWindow: vi.fn()
-    },
-    mockUseWindowSnap: {
-      setSnapPreview: vi.fn()
-    },
-    mockUseWindowStatus: {
-      size: { width: 400, height: 300 },
-      position: { x: 100, y: 100 },
-      isDragging: false,
-      isResizing: false,
-      drag: vi.fn(),
-      resize: vi.fn(),
-      windowRef: { current: null }
-    },
-    MockWindowHeader: vi.fn()
-  };
-});
+const { mockUseWindowActions, mockUseWindowSnap, mockUseWindowStatus, MockWindowHeader } =
+  vi.hoisted(() => {
+    return {
+      mockUseWindowActions: {
+        closeWindow: vi.fn(),
+        focusWindow: vi.fn(),
+        updateWindow: vi.fn(),
+      },
+      mockUseWindowSnap: {
+        setSnapPreview: vi.fn(),
+      },
+      mockUseWindowStatus: {
+        size: { width: 400, height: 300 },
+        position: { x: 100, y: 100 },
+        isDragging: false,
+        isResizing: false,
+        drag: vi.fn(),
+        resize: vi.fn(),
+        windowRef: { current: null },
+      },
+      MockWindowHeader: vi.fn(),
+    };
+  });
 
 vi.mock('../../../store/window-system-context', () => ({
   useWindowActions: () => mockUseWindowActions,
-  useWindowSnap: () => mockUseWindowSnap
+  useWindowSnap: () => mockUseWindowSnap,
 }));
 
 vi.mock('../../../hooks/useWindow/useWindowStatus', () => ({
-  useWindowStatus: () => mockUseWindowStatus
+  useWindowStatus: () => mockUseWindowStatus,
 }));
 
 vi.mock('../WindowHeader', () => ({
-  default: MockWindowHeader
+  default: MockWindowHeader,
 }));
 
 describe('Window', () => {
@@ -48,7 +49,7 @@ describe('Window', () => {
     zIndex: 100,
     layer: 'normal',
     size: { width: 400, height: 300 },
-    position: { x: 100, y: 100 }
+    position: { x: 100, y: 100 },
   };
 
   const originalRAF = global.requestAnimationFrame;
@@ -57,9 +58,11 @@ describe('Window', () => {
     vi.clearAllMocks();
 
     MockWindowHeader.mockImplementation(({ title, onClose }: any) => (
-      <div data-testid="window-header">
+      <div data-testid='window-header'>
         <span>{title}</span>
-        <button onClick={onClose} data-testid="close-btn">X</button>
+        <button onClick={onClose} data-testid='close-btn'>
+          X
+        </button>
       </div>
     ));
 

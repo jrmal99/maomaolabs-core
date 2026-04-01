@@ -6,7 +6,7 @@ export const WindowContext = createContext<WindowContextState | null>(null);
 /**
  * useWindowUI hook.
  * Provides access to the WindowContext.
- * 
+ *
  * @returns {WindowContextState} The WindowContext.
  */
 export const useWindowUI = () => {

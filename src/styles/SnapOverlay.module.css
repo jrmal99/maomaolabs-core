@@ -87,7 +87,6 @@
 }
 
 @media (prefers-color-scheme: dark) {
-
   .overlay,
   .overlayCorner {
     background-color: rgba(101, 253, 185, 0.1);

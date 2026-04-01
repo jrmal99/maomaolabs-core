@@ -20,10 +20,9 @@ interface WindowSystemProviderProps {
   systemStyle?: SystemStyle;
 }
 
-export function WindowSystemProvider({ children, systemStyle = 'default' }: WindowSystemProviderProps) {
-  return (
-    <SystemStyleContext.Provider value={systemStyle}>
-      {children}
-    </SystemStyleContext.Provider>
-  );
+export function WindowSystemProvider({
+  children,
+  systemStyle = 'default',
+}: WindowSystemProviderProps) {
+  return <SystemStyleContext.Provider value={systemStyle}>{children}</SystemStyleContext.Provider>;
 }

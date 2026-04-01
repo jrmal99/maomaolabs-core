@@ -1,38 +1,47 @@
-import React, { ReactNode, useRef, useState } from "react"
-import { createPortal } from "react-dom"
-import styles from '../../../styles/toolbar/ToolbarButton.module.css'
-import WindowPreview from "./WindowPreview"
-import { CloseButton } from "../../window/icons/Close"
+import React, { ReactNode, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import styles from '../../../styles/toolbar/ToolbarButton.module.css';
+import WindowPreview from './WindowPreview';
+import { CloseButton } from '../../window/icons/Close';
 
 type ToolbarButtonProps = {
-  icon: ReactNode
-  onClick: () => void
-  label: string
-  isActive?: boolean
-  onClose?: () => void
-  component?: ReactNode
-  windowId?: string
-  showTooltip?: boolean
-}
+  icon: ReactNode;
+  onClick: () => void;
+  label: string;
+  isActive?: boolean;
+  onClose?: () => void;
+  component?: ReactNode;
+  windowId?: string;
+  showTooltip?: boolean;
+};
 
-function ToolbarButton({ icon, onClick, label, isActive, onClose, component, windowId, showTooltip = true }: ToolbarButtonProps) {
-  const [isHovered, setIsHovered] = useState(false)
-  const wrapperRef = useRef<HTMLDivElement>(null)
-  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+function ToolbarButton({
+  icon,
+  onClick,
+  label,
+  isActive,
+  onClose,
+  component,
+  windowId,
+  showTooltip = true,
+}: ToolbarButtonProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
     if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current)
-      closeTimeoutRef.current = null
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
     }
-    setIsHovered(true)
-  }
+    setIsHovered(true);
+  };
 
   const handleMouseLeave = () => {
     closeTimeoutRef.current = setTimeout(() => {
-      setIsHovered(false)
-    }, 100)
-  }
+      setIsHovered(false);
+    }, 100);
+  };
 
   return (
     <div
@@ -41,64 +50,67 @@ function ToolbarButton({ icon, onClick, label, isActive, onClose, component, win
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {isHovered && typeof document !== 'undefined' && createPortal(
-        (isActive && onClose) ? (
-          <div
-            className={styles.preview}
-            style={{
-              left: wrapperRef.current ? wrapperRef.current.getBoundingClientRect().left + wrapperRef.current.getBoundingClientRect().width / 2 : 0,
-              top: wrapperRef.current ? wrapperRef.current.getBoundingClientRect().top : 0,
-            }}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div className={styles.previewHeader}>
-              <span className={styles.previewTitle}>{label}</span>
-              <CloseButton
-                onClose={
-                  (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
-                    e?.preventDefault()
-                    e?.stopPropagation()
-                    onClose()
-                  }
-                }
-              />
-            </div>
-            <div className={styles.previewBody} onClick={(e) => {
-              e.stopPropagation();
-              onClick();
-            }}>
-              <div className={styles.previewContent}>
-                {windowId ? <WindowPreview windowId={windowId} /> : component}
+      {isHovered &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          isActive && onClose ? (
+            <div
+              className={styles.preview}
+              style={{
+                left: wrapperRef.current
+                  ? wrapperRef.current.getBoundingClientRect().left +
+                    wrapperRef.current.getBoundingClientRect().width / 2
+                  : 0,
+                top: wrapperRef.current ? wrapperRef.current.getBoundingClientRect().top : 0,
+              }}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div className={styles.previewHeader}>
+                <span className={styles.previewTitle}>{label}</span>
+                <CloseButton
+                  onClose={(e: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+                    e?.preventDefault();
+                    e?.stopPropagation();
+                    onClose();
+                  }}
+                />
+              </div>
+              <div
+                className={styles.previewBody}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClick();
+                }}
+              >
+                <div className={styles.previewContent}>
+                  {windowId ? <WindowPreview windowId={windowId} /> : component}
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          showTooltip ? (
+          ) : showTooltip ? (
             <div
               className={styles.labelTooltip}
               style={{
-                left: wrapperRef.current ? wrapperRef.current.getBoundingClientRect().left + wrapperRef.current.getBoundingClientRect().width / 2 : 0,
+                left: wrapperRef.current
+                  ? wrapperRef.current.getBoundingClientRect().left +
+                    wrapperRef.current.getBoundingClientRect().width / 2
+                  : 0,
                 top: wrapperRef.current ? wrapperRef.current.getBoundingClientRect().top : 0,
               }}
             >
               {label}
             </div>
-          ) : null
-        ),
-        document.body
-      )}
+          ) : null,
+          document.body,
+        )}
 
-      <button
-        onClick={onClick}
-        aria-label={label}
-        className={styles.button}
-      >
+      <button onClick={onClick} aria-label={label} className={styles.button}>
         {icon}
         {isActive && <div className={styles.activeIndicator} />}
       </button>
     </div>
-  )
+  );
 }
 
 const ToolbarButtonMemo = React.memo(ToolbarButton);

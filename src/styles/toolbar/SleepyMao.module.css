@@ -44,8 +44,12 @@
     transform: translate(0, 0) rotate(-5deg);
     opacity: 0;
   }
-  25% { opacity: 0.8; }
-  75% { opacity: 0; }
+  25% {
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 0;
+  }
   100% {
     transform: translate(15px, -25px) rotate(5deg);
     opacity: 0;
@@ -53,5 +57,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .z { color: white; }
+  .z {
+    color: white;
+  }
 }

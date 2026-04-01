@@ -6,52 +6,58 @@ export function useDrag(
   position: Position,
   windowRef: React.RefObject<HTMLDivElement>,
   onMove: (pos: Position) => void,
-  onSnapCheck?: (x: number, y: number) => void
+  onSnapCheck?: (x: number, y: number) => void,
 ) {
   const isDragging = useRef(false);
   const start = useRef({ x: 0, y: 0 });
 
-  const dragTo = useCallback((e: MouseEvent) => {
-    if (!isDragging.current) return;
+  const dragTo = useCallback(
+    (e: MouseEvent) => {
+      if (!isDragging.current) return;
 
-    onSnapCheck?.(e.clientX, e.clientY);
+      onSnapCheck?.(e.clientX, e.clientY);
 
-    const x = Math.min(
-      Math.max(0, e.clientX - start.current.x),
-      window.innerWidth - size.width
-    );
-    const y = Math.min(
-      Math.max(0, e.clientY - start.current.y),
-      window.innerHeight - size.height
-    );
+      const x = Math.min(Math.max(0, e.clientX - start.current.x), window.innerWidth - size.width);
+      const y = Math.min(
+        Math.max(0, e.clientY - start.current.y),
+        window.innerHeight - size.height,
+      );
 
-    if (windowRef.current) {
-      windowRef.current.style.left = `${x}px`;
-      windowRef.current.style.top = `${y}px`;
-    }
+      if (windowRef.current) {
+        windowRef.current.style.left = `${x}px`;
+        windowRef.current.style.top = `${y}px`;
+      }
 
-    onMove({ x, y });
-  }, [size, onMove, onSnapCheck]);
+      onMove({ x, y });
+    },
+    [size, onMove, onSnapCheck],
+  );
 
-  const startDrag = useCallback((e: React.MouseEvent) => {
-    window.getSelection()?.removeAllRanges();
-    document.body.style.userSelect = "none";
-    start.current = {
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
-    };
-    isDragging.current = true;
-  }, [position.x, position.y]);
+  const startDrag = useCallback(
+    (e: React.MouseEvent) => {
+      window.getSelection()?.removeAllRanges();
+      document.body.style.userSelect = 'none';
+      start.current = {
+        x: e.clientX - position.x,
+        y: e.clientY - position.y,
+      };
+      isDragging.current = true;
+    },
+    [position.x, position.y],
+  );
 
   const stopDrag = useCallback(() => {
     isDragging.current = false;
-    document.body.style.userSelect = "auto";
+    document.body.style.userSelect = 'auto';
   }, []);
 
-  return useMemo(() => ({
-    dragTo,
-    startDrag,
-    stopDrag,
-    isDragging
-  }), [dragTo, startDrag, stopDrag]);
+  return useMemo(
+    () => ({
+      dragTo,
+      startDrag,
+      stopDrag,
+      isDragging,
+    }),
+    [dragTo, startDrag, stopDrag],
+  );
 }

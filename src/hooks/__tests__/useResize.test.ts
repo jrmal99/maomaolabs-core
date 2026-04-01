@@ -5,14 +5,14 @@ import { MIN_WIDTH, MIN_HEIGHT } from '../useWindow/constants';
 
 describe('useResize', () => {
   let windowRef: any;
-  const onResizeEnd = vi.fn(); 
+  const onResizeEnd = vi.fn();
   const size = { width: 500, height: 500 };
 
   beforeEach(() => {
     windowRef = {
       current: {
-        style: { width: '', height: '' }
-      }
+        style: { width: '', height: '' },
+      },
     };
     vi.clearAllMocks();
   });

@@ -2,23 +2,23 @@ import { useMemo } from 'react';
 import { ToolbarItem, FolderDefinition, WindowInstance } from '../types';
 
 export function isFolder(item: ToolbarItem): item is FolderDefinition {
-    return 'apps' in item;
+  return 'apps' in item;
 }
 
 export function useToolbarItems(
-    rawWindowsOptions: ToolbarItem[],
-    currentWindows: WindowInstance[]
+  rawWindowsOptions: ToolbarItem[],
+  currentWindows: WindowInstance[],
 ) {
-    const windowsOptions = useMemo(() => {
-        return Array.isArray(rawWindowsOptions) ? rawWindowsOptions : [];
-    }, [rawWindowsOptions]);
+  const windowsOptions = useMemo(() => {
+    return Array.isArray(rawWindowsOptions) ? rawWindowsOptions : [];
+  }, [rawWindowsOptions]);
 
-    const availableItems = useMemo(() => {
-        return windowsOptions;
-    }, [windowsOptions]);
+  const availableItems = useMemo(() => {
+    return windowsOptions;
+  }, [windowsOptions]);
 
-    return {
-        windowsOptions,
-        isFolder
-    };
+  return {
+    windowsOptions,
+    isFolder,
+  };
 }

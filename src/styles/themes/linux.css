@@ -2,16 +2,16 @@
 /* Linux (Ubuntu Ambiance) Theme Styles  */
 /* ------------------------------------- */
 
-[data-system-style="linux"] .window-header,
-[data-system-style="linux"] .window-header {
+[data-system-style='linux'] .window-header,
+[data-system-style='linux'] .window-header {
   flex-direction: row-reverse;
 }
 
-[data-system-style="linux"] .window-controls {
+[data-system-style='linux'] .window-controls {
   gap: 8px;
 }
 
-[data-system-style="linux"] button.terminal-btn {
+[data-system-style='linux'] button.terminal-btn {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -22,70 +22,75 @@
   color: rgba(0, 0, 0, 0.7);
   background: linear-gradient(180deg, #f5f4f2 0%, #e6e5e1 100%);
   border: 1px solid #c2c0bc;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8),
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
     0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: background 0.25s ease-out, color 0.25s ease-out, border-color 0.25s ease-out, filter 0.25s ease-out;
+  transition:
+    background 0.25s ease-out,
+    color 0.25s ease-out,
+    border-color 0.25s ease-out,
+    filter 0.25s ease-out;
 }
 
-[data-system-style="linux"] button.terminal-btn:disabled {
+[data-system-style='linux'] button.terminal-btn:disabled {
   opacity: 0.4;
   background: #e6e5e1;
 }
 
-[data-system-style="linux"] button.terminal-btn svg {
+[data-system-style='linux'] button.terminal-btn svg {
   width: 8px;
   height: 8px;
   stroke: currentColor;
   transition: stroke 0.25s ease-out;
 }
 
-[data-system-style="linux"] button.terminal-btn[data-action="close"] {
+[data-system-style='linux'] button.terminal-btn[data-action='close'] {
   background: linear-gradient(180deg, #e86350 0%, #d84b35 100%);
   border-color: #ba321e;
   color: white;
 }
 
-[data-system-style="linux"] button.terminal-btn:hover:not(:disabled) {
+[data-system-style='linux'] button.terminal-btn:hover:not(:disabled) {
   color: rgba(0, 0, 0, 0.9);
   filter: brightness(1.05);
 }
 
-[data-system-style="linux"] button.terminal-btn[data-action="close"]:hover:not(:disabled) {
+[data-system-style='linux'] button.terminal-btn[data-action='close']:hover:not(:disabled) {
   color: white;
   filter: brightness(1.1);
 }
 
-[data-system-style="linux"] button.terminal-btn[data-action="close"] {
+[data-system-style='linux'] button.terminal-btn[data-action='close'] {
   order: 1;
 }
 
-[data-system-style="linux"] button.terminal-btn[data-action="minimize"] {
+[data-system-style='linux'] button.terminal-btn[data-action='minimize'] {
   order: 2;
 }
 
-[data-system-style="linux"] button.terminal-btn[data-action="maximize"] {
+[data-system-style='linux'] button.terminal-btn[data-action='maximize'] {
   order: 3;
 }
 
 @media (prefers-color-scheme: dark) {
-  [data-system-style="linux"] button.terminal-btn {
+  [data-system-style='linux'] button.terminal-btn {
     color: rgba(255, 255, 255, 0.7);
     background: linear-gradient(180deg, #5c5955 0%, #3e3b37 100%);
     border-color: #2b2926;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
-  [data-system-style="linux"] button.terminal-btn:disabled {
+  [data-system-style='linux'] button.terminal-btn:disabled {
     opacity: 0.4;
     background: #3e3b37;
   }
 
-  [data-system-style="linux"] button.terminal-btn[data-action="close"] {
+  [data-system-style='linux'] button.terminal-btn[data-action='close'] {
     background: linear-gradient(180deg, #c4402a 0%, #a02814 100%);
     border-color: #7b1d0e;
   }
 
-  [data-system-style="linux"] button.terminal-btn:hover:not(:disabled) {
+  [data-system-style='linux'] button.terminal-btn:hover:not(:disabled) {
     color: white;
     filter: brightness(1.2);
   }

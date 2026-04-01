@@ -2,10 +2,7 @@ import { useSyncExternalStore } from 'react';
 
 type Listener = () => void;
 
-type SetState<T> = (
-  partial: Partial<T> | ((state: T) => Partial<T>),
-  replace?: boolean
-) => void;
+type SetState<T> = (partial: Partial<T> | ((state: T) => Partial<T>), replace?: boolean) => void;
 type GetState<T> = () => T;
 
 export interface StoreApi<T> {
@@ -20,7 +17,7 @@ export type UseStore<T> = {
 } & StoreApi<T>;
 
 export function createStore<TState>(
-  createState: (set: SetState<TState>, get: GetState<TState>) => TState
+  createState: (set: SetState<TState>, get: GetState<TState>) => TState,
 ): UseStore<TState> {
   let state: TState;
   const listeners = new Set<Listener>();
@@ -45,9 +42,7 @@ export function createStore<TState>(
 
   state = createState(setState, getState);
 
-  const useStore = <TSelection>(
-    selector?: (state: TState) => TSelection
-  ): TSelection | TState => {
+  const useStore = <TSelection>(selector?: (state: TState) => TSelection): TSelection | TState => {
     const storeState = useSyncExternalStore(subscribe, getState, getState);
     return selector ? selector(storeState) : storeState;
   };

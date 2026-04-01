@@ -1,5 +1,5 @@
-'use client'
-import styles from '../../styles/SnapOverlay.module.css'
+'use client';
+import styles from '../../styles/SnapOverlay.module.css';
 
 interface SnapOverlayProps {
   side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | null;
@@ -52,5 +52,5 @@ export default function SnapOverlay({ side }: SnapOverlayProps) {
         `}
       />
     </>
-  )
+  );
 }

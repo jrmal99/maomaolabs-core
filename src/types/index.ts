@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { SystemStyle } from '../store/WindowSystemProvider';
 
@@ -40,14 +39,18 @@ export type WindowCore = {
   isMaximized?: boolean;
 };
 
-export type WindowDefinition = WindowCore & WindowPresentation & WindowGeometry & WindowBehavior & WindowStyling;
+export type WindowDefinition = WindowCore &
+  WindowPresentation &
+  WindowGeometry &
+  WindowBehavior &
+  WindowStyling;
 
 export type FolderDefinition = {
   id: string;
   title: string;
   icon?: React.ReactNode;
   apps: WindowDefinition[];
-}
+};
 
 export type ToolbarItem = WindowDefinition | FolderDefinition;
 
@@ -62,7 +65,7 @@ export type WindowInstance = Omit<WindowDefinition, 'initialSize' | 'initialPosi
   isMaximized?: boolean;
   isSnapped?: boolean;
   zIndex: number;
-}
+};
 
 /**
  * WindowSystemProvider type.
@@ -70,8 +73,14 @@ export type WindowInstance = Omit<WindowDefinition, 'initialSize' | 'initialPosi
  */
 export type WindowSystemProvider = {
   windows: WindowInstance[];
-  snapPreview: { side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' } | null;
-  setSnapPreview: (preview: { side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' } | null) => void;
+  snapPreview: {
+    side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  } | null;
+  setSnapPreview: (
+    preview: {
+      side: 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+    } | null,
+  ) => void;
   openWindow: (window: WindowDefinition) => void;
   closeWindow: (id: string) => void;
   focusWindow: (id: string) => void;
@@ -80,8 +89,8 @@ export type WindowSystemProvider = {
 };
 
 export type WindowProps = {
-  window: WindowInstance
-}
+  window: WindowInstance;
+};
 
 export type WindowHeaderProps = {
   onClose: () => void;
@@ -90,20 +99,20 @@ export type WindowHeaderProps = {
   canMinimize?: boolean;
   canMaximize?: boolean;
   canClose?: boolean;
-}
+};
 
 export type WindowContextState = {
-  size: { width: number; height: number }
-  position: { x: number; y: number }
-  isDragging: boolean
-  isResizing: boolean
-  drag: (e: React.MouseEvent) => void
-  resize: (e: React.MouseEvent) => void
-  isMinimized: boolean
-  isMaximized: boolean
-  isSnapped: boolean
-  minimize: () => void
-  maximize: () => void
-  restore: () => void
-  windowRef: React.RefObject<HTMLDivElement>
-}
+  size: { width: number; height: number };
+  position: { x: number; y: number };
+  isDragging: boolean;
+  isResizing: boolean;
+  drag: (e: React.MouseEvent) => void;
+  resize: (e: React.MouseEvent) => void;
+  isMinimized: boolean;
+  isMaximized: boolean;
+  isSnapped: boolean;
+  minimize: () => void;
+  maximize: () => void;
+  restore: () => void;
+  windowRef: React.RefObject<HTMLDivElement>;
+};

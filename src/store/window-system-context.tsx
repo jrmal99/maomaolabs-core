@@ -1,7 +1,10 @@
 import { useWindowStore } from './windowStore';
 import { WindowSystemProvider as WindowSystemProviderType } from '../types';
 
-export type WindowDispatch = Omit<WindowSystemProviderType, 'windows' | 'snapPreview' | 'setSnapPreview'>;
+export type WindowDispatch = Omit<
+  WindowSystemProviderType,
+  'windows' | 'snapPreview' | 'setSnapPreview'
+>;
 
 /**
  * useWindowActions hook.

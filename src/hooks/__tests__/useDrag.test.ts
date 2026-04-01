@@ -12,8 +12,8 @@ describe('useDrag', () => {
   beforeEach(() => {
     windowRef = {
       current: {
-        style: { left: '', top: '' }
-      }
+        style: { left: '', top: '' },
+      },
     };
     vi.clearAllMocks();
     global.innerWidth = 1000;

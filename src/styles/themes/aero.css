@@ -2,7 +2,7 @@
 /* Aero Glass Theme Styles               */
 /* ------------------------------------- */
 
-[data-system-style="aero"] {
+[data-system-style='aero'] {
   border-radius: 6px;
   border: 1px solid #808080;
   box-shadow: inset 0 0 0 1px #c8d8ec;
@@ -11,50 +11,42 @@
   -webkit-backdrop-filter: none !important;
 }
 
-[data-system-style="aero"] .window-header,
-[data-system-style="aero"].focused .window-header {
+[data-system-style='aero'] .window-header,
+[data-system-style='aero'].focused .window-header {
   height: 30px;
-  background: linear-gradient(180deg,
-      #b4d2f5 0%,
-      #8cb9eb 50%,
-      #6ea0e1 51%,
-      #a0c8f5 100%);
+  background: linear-gradient(180deg, #b4d2f5 0%, #8cb9eb 50%, #6ea0e1 51%, #a0c8f5 100%);
   border-bottom: 1px solid #5082c8;
   color: #000;
   text-shadow: 0 1px 0 #fff;
-  font-family: "Segoe UI", Tahoma, sans-serif;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
   padding: 0 8px;
 }
 
-[data-system-style="aero"]:not(.focused) {
+[data-system-style='aero']:not(.focused) {
   background: #f0f0f0 !important;
   box-shadow: inset 0 0 0 1px #d8d8d8;
 }
 
-[data-system-style="aero"]:not(.focused) .window-header {
-  background: linear-gradient(180deg,
-      #d2dceb 0%,
-      #becde1 50%,
-      #afc0d7 51%,
-      #c8d7e6 100%);
+[data-system-style='aero']:not(.focused) .window-header {
+  background: linear-gradient(180deg, #d2dceb 0%, #becde1 50%, #afc0d7 51%, #c8d7e6 100%);
   border-bottom: 1px solid #96aac8;
   color: #666;
   text-shadow: none;
 }
 
-[data-system-style="aero"] .window-title,
-[data-system-style="aero"] .brand-text {
-  font-family: "Segoe UI", Tahoma, sans-serif;
+[data-system-style='aero'] .window-title,
+[data-system-style='aero'] .brand-text {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
   font-size: 13px;
 }
 
-[data-system-style="aero"] .window-controls {
+[data-system-style='aero'] .window-controls {
   gap: 1px;
   margin-right: -4px;
 }
 
 /* --- Default button --- */
-[data-system-style="aero"] button.terminal-btn {
+[data-system-style='aero'] button.terminal-btn {
   width: 28px;
   height: 20px;
   border-radius: 0 0 3px 3px;
@@ -62,11 +54,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg,
-      #f0f6ff 0%,
-      #c8d8f0 40%,
-      #96b4dc 40%,
-      #b4d2f0 100%);
+  background: linear-gradient(180deg, #f0f6ff 0%, #c8d8f0 40%, #96b4dc 40%, #b4d2f0 100%);
   border: 1px solid #b3b3b3;
   border-top: none;
   box-shadow: inset 0 0 2px #e8f0fa;
@@ -75,31 +63,25 @@
   margin-top: -10px;
 }
 
-[data-system-style="aero"] button.terminal-btn:hover:not(:disabled) {
-  background: linear-gradient(180deg,
-      #ffffff 0%,
-      #b4dcff 40%,
-      #6ab4f0 40%,
-      #96dcff 100%);
+[data-system-style='aero'] button.terminal-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #ffffff 0%, #b4dcff 40%, #6ab4f0 40%, #96dcff 100%);
   border-color: #808080;
-  box-shadow: inset 0 0 3px #fff, 0 0 5px #64c8ff;
+  box-shadow:
+    inset 0 0 3px #fff,
+    0 0 5px #64c8ff;
 }
 
-[data-system-style="aero"] button.terminal-btn:active:not(:disabled) {
-  background: linear-gradient(180deg,
-      #d2d2d2 0%,
-      #78a0c8 40%,
-      #5082c8 40%,
-      #6ea0e4 100%);
+[data-system-style='aero'] button.terminal-btn:active:not(:disabled) {
+  background: linear-gradient(180deg, #d2d2d2 0%, #78a0c8 40%, #5082c8 40%, #6ea0e4 100%);
   box-shadow: inset 0 2px 4px #4a6680;
 }
 
-[data-system-style="aero"] button.terminal-btn:disabled {
+[data-system-style='aero'] button.terminal-btn:disabled {
   opacity: 0.5;
   filter: grayscale(100%);
 }
 
-[data-system-style="aero"] button.terminal-btn svg {
+[data-system-style='aero'] button.terminal-btn svg {
   width: 10px;
   height: 10px;
   stroke: #000;
@@ -107,51 +89,41 @@
 }
 
 /* --- Close button --- */
-[data-system-style="aero"] button.terminal-btn[data-action="close"] {
+[data-system-style='aero'] button.terminal-btn[data-action='close'] {
   width: 44px;
-  background: linear-gradient(180deg,
-      #fff0f0 0%,
-      #f1c9c9 40%,
-      #de7676 40%,
-      #e89191 100%);
+  background: linear-gradient(180deg, #fff0f0 0%, #f1c9c9 40%, #de7676 40%, #e89191 100%);
   border-color: #9a5a5a;
   border-radius: 0 0 4px 0;
   order: 3;
 }
 
-[data-system-style="aero"] button.terminal-btn[data-action="close"] svg {
+[data-system-style='aero'] button.terminal-btn[data-action='close'] svg {
   width: 12px;
   height: 12px;
   stroke: #fff;
   filter: drop-shadow(0 0 2px #000);
 }
 
-[data-system-style="aero"] button.terminal-btn[data-action="close"]:hover:not(:disabled) {
-  background: linear-gradient(180deg,
-      #ffcfcf 0%,
-      #ffabab 40%,
-      #dc1e1e 40%,
-      #ff7878 100%);
+[data-system-style='aero'] button.terminal-btn[data-action='close']:hover:not(:disabled) {
+  background: linear-gradient(180deg, #ffcfcf 0%, #ffabab 40%, #dc1e1e 40%, #ff7878 100%);
   border-color: #660000;
-  box-shadow: inset 0 0 3px #ffcccc, 0 0 8px #ff3232;
+  box-shadow:
+    inset 0 0 3px #ffcccc,
+    0 0 8px #ff3232;
 }
 
-[data-system-style="aero"] button.terminal-btn[data-action="close"]:active:not(:disabled) {
-  background: linear-gradient(180deg,
-      #d36363 0%,
-      #c33c3c 40%,
-      #a41414 40%,
-      #c85050 100%);
+[data-system-style='aero'] button.terminal-btn[data-action='close']:active:not(:disabled) {
+  background: linear-gradient(180deg, #d36363 0%, #c33c3c 40%, #a41414 40%, #c85050 100%);
   box-shadow: inset 0 2px 5px #6e0000;
 }
 
 /* --- Minimize / Maximize order --- */
-[data-system-style="aero"] button.terminal-btn[data-action="minimize"] {
+[data-system-style='aero'] button.terminal-btn[data-action='minimize'] {
   order: 1;
   border-radius: 0 0 0 4px;
 }
 
-[data-system-style="aero"] button.terminal-btn[data-action="maximize"] {
+[data-system-style='aero'] button.terminal-btn[data-action='maximize'] {
   order: 2;
 }
 
@@ -159,98 +131,69 @@
 /* Dark mode                                   */
 /* =========================================== */
 @media (prefers-color-scheme: dark) {
-  [data-system-style="aero"] {
+  [data-system-style='aero'] {
     background: #1e2832 !important;
     border-color: #000;
-    box-shadow:
-      inset 0 0 0 1px #2a3646;
+    box-shadow: inset 0 0 0 1px #2a3646;
   }
 
-  [data-system-style="aero"]:not(.focused) {
+  [data-system-style='aero']:not(.focused) {
     background: #282d32 !important;
     box-shadow: inset 0 0 0 1px #1e2228;
   }
 
-  [data-system-style="aero"] .window-header,
-  [data-system-style="aero"].focused .window-header {
-    background: linear-gradient(180deg,
-        #28374b 0%,
-        #1e2d41 50%,
-        #142337 51%,
-        #233246 100%);
+  [data-system-style='aero'] .window-header,
+  [data-system-style='aero'].focused .window-header {
+    background: linear-gradient(180deg, #28374b 0%, #1e2d41 50%, #142337 51%, #233246 100%);
     border-bottom: 1px solid #000;
     color: #fff;
     text-shadow: 0 1px 2px #000;
   }
 
-  [data-system-style="aero"]:not(.focused) .window-header {
-    background: linear-gradient(180deg,
-        #32373c 0%,
-        #282d34 50%,
-        #21262d 51%,
-        #2c323a 100%);
+  [data-system-style='aero']:not(.focused) .window-header {
+    background: linear-gradient(180deg, #32373c 0%, #282d34 50%, #21262d 51%, #2c323a 100%);
     border-bottom: 1px solid #000;
     color: #999;
   }
 
   /* --- Dark default button --- */
-  [data-system-style="aero"] button.terminal-btn {
-    background: linear-gradient(180deg,
-        #505a64 0%,
-        #323c46 40%,
-        #141e28 40%,
-        #283246 100%);
+  [data-system-style='aero'] button.terminal-btn {
+    background: linear-gradient(180deg, #505a64 0%, #323c46 40%, #141e28 40%, #283246 100%);
     border-color: #000;
     box-shadow: inset 0 1px 1px #3a4e66;
     color: #fff;
   }
 
-  [data-system-style="aero"] button.terminal-btn svg {
+  [data-system-style='aero'] button.terminal-btn svg {
     stroke: #fff;
   }
 
-  [data-system-style="aero"] button.terminal-btn:hover:not(:disabled) {
-    background: linear-gradient(180deg,
-        #788eb4 0%,
-        #506e8c 40%,
-        #325a82 40%,
-        #5082b4 100%);
-    box-shadow: inset 0 1px 2px #6496c8, 0 0 5px #64b4ff;
+  [data-system-style='aero'] button.terminal-btn:hover:not(:disabled) {
+    background: linear-gradient(180deg, #788eb4 0%, #506e8c 40%, #325a82 40%, #5082b4 100%);
+    box-shadow:
+      inset 0 1px 2px #6496c8,
+      0 0 5px #64b4ff;
   }
 
-  [data-system-style="aero"] button.terminal-btn:active:not(:disabled) {
-    background: linear-gradient(180deg,
-        #283246 0%,
-        #1e2c3c 40%,
-        #0a1628 40%,
-        #1e2a3c 100%);
+  [data-system-style='aero'] button.terminal-btn:active:not(:disabled) {
+    background: linear-gradient(180deg, #283246 0%, #1e2c3c 40%, #0a1628 40%, #1e2a3c 100%);
     box-shadow: inset 0 2px 4px #000;
   }
 
   /* --- Dark close button --- */
-  [data-system-style="aero"] button.terminal-btn[data-action="close"] {
-    background: linear-gradient(180deg,
-        #963232 0%,
-        #781e1e 40%,
-        #640a0a 40%,
-        #822828 100%);
+  [data-system-style='aero'] button.terminal-btn[data-action='close'] {
+    background: linear-gradient(180deg, #963232 0%, #781e1e 40%, #640a0a 40%, #822828 100%);
   }
 
-  [data-system-style="aero"] button.terminal-btn[data-action="close"]:hover:not(:disabled) {
-    background: linear-gradient(180deg,
-        #dc6464 0%,
-        #c83c3c 40%,
-        #b41414 40%,
-        #dc5050 100%);
-    box-shadow: inset 0 1px 2px #ff9696, 0 0 8px #ff3232;
+  [data-system-style='aero'] button.terminal-btn[data-action='close']:hover:not(:disabled) {
+    background: linear-gradient(180deg, #dc6464 0%, #c83c3c 40%, #b41414 40%, #dc5050 100%);
+    box-shadow:
+      inset 0 1px 2px #ff9696,
+      0 0 8px #ff3232;
   }
 
-  [data-system-style="aero"] button.terminal-btn[data-action="close"]:active:not(:disabled) {
-    background: linear-gradient(180deg,
-        #641414 0%,
-        #500a0a 40%,
-        #3c0000 40%,
-        #580e0e 100%);
+  [data-system-style='aero'] button.terminal-btn[data-action='close']:active:not(:disabled) {
+    background: linear-gradient(180deg, #641414 0%, #500a0a 40%, #3c0000 40%, #580e0e 100%);
     box-shadow: inset 0 2px 4px #000;
   }
 }
