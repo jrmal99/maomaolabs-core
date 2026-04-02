@@ -6,9 +6,8 @@ import { useWindowStore } from '../../store/windowStore';
 import Window from './Window';
 import SnapOverlay from './SnapOverlay';
 import getSnapMap from './snapMap';
+import { HEADER_VISIBLE } from '../../hooks/useWindow/constants';
 import styles from '../../styles/WindowManager.module.css';
-
-const HEADER_VISIBLE = 100;
 
 /**
  * Main window manager component.

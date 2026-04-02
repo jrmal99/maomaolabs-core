@@ -1,5 +1,5 @@
 import { useRef, useCallback, useMemo } from 'react';
-import { MIN_HEIGHT, MIN_WIDTH } from './constants';
+import { HEADER_VISIBLE, MIN_HEIGHT, MIN_WIDTH } from './constants';
 import { Size, Position } from './types';
 
 /** Which edge or corner is being resized. */
@@ -37,38 +37,57 @@ export function useResize(
       const vw = window.innerWidth;
       const vh = window.innerHeight;
 
+      // Calculate raw desired values, then clamp the active edge to the viewport.
+      // When the position hits a boundary, the dimension freezes too.
+
+      // Each active edge is clamped to stay within [HEADER_VISIBLE, vw - HEADER_VISIBLE]
+      // so at least 100px of the window remains visible on each side.
+
       if (edge.includes('e')) {
         newW = Math.max(MIN_WIDTH, start.current.w + dx);
+        const rightEdge = newX + newW;
+        // Right edge can't go past viewport right
+        if (rightEdge > vw) newW = vw - newX;
+        // Right edge can't shrink past 100px from viewport left
+        if (rightEdge < HEADER_VISIBLE) newW = HEADER_VISIBLE - newX;
       }
       if (edge.includes('w')) {
         newW = Math.max(MIN_WIDTH, start.current.w - dx);
         newX = start.current.px + (start.current.w - newW);
+        // Left edge can't go past viewport left
+        if (newX < 0) {
+          newW += newX;
+          newX = 0;
+        }
+        // Left edge can't shrink past 100px from viewport right
+        if (newX > vw - HEADER_VISIBLE) {
+          newW += newX - (vw - HEADER_VISIBLE);
+          newX = vw - HEADER_VISIBLE;
+        }
       }
       if (edge.includes('s')) {
         newH = Math.max(MIN_HEIGHT, start.current.h + dy);
+        const bottomEdge = newY + newH;
+        // Bottom edge can't go past viewport bottom
+        if (bottomEdge > vh) newH = vh - newY;
+        // Bottom edge can't shrink past viewport top
+        if (bottomEdge < 0) newH = -newY;
       }
       if (edge.includes('n')) {
         newH = Math.max(MIN_HEIGHT, start.current.h - dy);
         newY = start.current.py + (start.current.h - newH);
+        // Top edge can't go past viewport top
+        if (newY < 0) {
+          newH += newY;
+          newY = 0;
+        }
+        // Top edge can't go below viewport bottom (keep header grabbable)
+        if (newY > vh - MIN_HEIGHT) {
+          newH += newY - (vh - MIN_HEIGHT);
+          newY = vh - MIN_HEIGHT;
+        }
       }
 
-      // Clamp: don't let any edge go outside the viewport
-      if (newX < 0) {
-        newW += newX;
-        newX = 0;
-      }
-      if (newY < 0) {
-        newH += newY;
-        newY = 0;
-      }
-      if (newX + newW > vw) {
-        newW = vw - newX;
-      }
-      if (newY + newH > vh) {
-        newH = vh - newY;
-      }
-
-      // Re-enforce minimums after clamping
       newW = Math.max(MIN_WIDTH, newW);
       newH = Math.max(MIN_HEIGHT, newH);
 

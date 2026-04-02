@@ -1,4 +1,5 @@
 import { useRef, useCallback, useMemo } from 'react';
+import { HEADER_VISIBLE } from './constants';
 import { Position, Size } from './types';
 
 /**
@@ -16,8 +17,6 @@ export function useDrag(
 ) {
   const isDragging = useRef(false);
   const start = useRef({ x: 0, y: 0 });
-
-  const HEADER_VISIBLE = 100;
 
   const dragTo = useCallback(
     (e: MouseEvent) => {
